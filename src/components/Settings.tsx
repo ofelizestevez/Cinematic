@@ -5,13 +5,14 @@ import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import ContentSettings from "./settings/ContentSettings";
 import ThemeSettings from "./settings/ThemeSettings";
+import GeneralSettings from "./settings/GeneralSettings";
 
 interface props {
 	showSettings: boolean;
 	setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SettingsPages = ["content", "theme"];
+const SettingsPages = ["content", "theme", "general"];
 
 type SettingsPagesType = (typeof SettingsPages)[number];
 
@@ -78,6 +79,10 @@ function Settings({ showSettings, setShowSettings }: props) {
 		text-transform: capitalize;
 	`;
 
+	const currentPageCSS = css`
+		font-weight: bold;
+	`
+
 	const handleCloseButton = () => {
 		setShowSettings(!showSettings);
 	};
@@ -112,12 +117,20 @@ function Settings({ showSettings, setShowSettings }: props) {
 								/>
 							);
 						}
-						if (settingsPage == "theme")
+						else if (settingsPage == "theme"){
 							return (
 								<ThemeSettings
 									currentlyShown={currentPage == "theme"}
 								/>
 							);
+						}
+						else if (settingsPage == "general"){
+							return (
+								<GeneralSettings
+									currentlyShown={currentPage == "general"}
+								/>
+							);
+						}
 					})}
 				</div>
 				<div css={closeIcon}>

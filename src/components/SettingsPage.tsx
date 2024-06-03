@@ -14,8 +14,8 @@ function SettingsPage({ children, currentlyShown , styles}: props) {
 	const style = css`
 		display: none;
 		height: calc(100vh - 10vh - (5rem * 2));
-		width: calc(100% - (1rem * 2));
-		margin: 5rem 1rem;
+		width: calc(100% - (2rem * 2));
+		margin: 5rem 2rem;
 		overflow: scroll;
 	`;
 
