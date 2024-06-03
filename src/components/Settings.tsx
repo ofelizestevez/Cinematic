@@ -17,7 +17,6 @@ type SettingsPagesType = (typeof SettingsPages)[number];
 
 function Settings({ showSettings, setShowSettings }: props) {
 	const ref = useRef(null);
-	const timeline = useRef(gsap.timeline());
 
 	const theme = useTheme();
 	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("content");
