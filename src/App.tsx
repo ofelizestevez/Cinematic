@@ -1,4 +1,4 @@
-import { ThemeProvider} from "@emotion/react";
+import { ThemeProvider } from "@emotion/react";
 import Theme from "./utilities/Theme.ts";
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -7,18 +7,28 @@ import Settings from "./components/Settings.tsx";
 import { CurrentThemeProvider } from "./utilities/CurrentThemeProvider";
 import { useState } from "react";
 
+import { ContentPageProvider } from "./utilities/ContentPageContext.tsx";
+
 function App() {
-	const [showSettings, setShowSettings] = useState(false)
+	const [showSettings, setShowSettings] = useState(false);
 
 	return (
-		<CurrentThemeProvider>
-			<ThemeProvider theme={Theme}>
-				<Header />
-				<Content />
-				<Settings showSettings={showSettings} setShowSettings={setShowSettings}/>
-				<Footer showSettings={showSettings} setShowSettings={setShowSettings}/>
-			</ThemeProvider>
-		</CurrentThemeProvider>
+		<ContentPageProvider>
+			<CurrentThemeProvider>
+				<ThemeProvider theme={Theme}>
+					<Header />
+					<Content />
+					<Settings
+						showSettings={showSettings}
+						setShowSettings={setShowSettings}
+					/>
+					<Footer
+						showSettings={showSettings}
+						setShowSettings={setShowSettings}
+					/>
+				</ThemeProvider>
+			</CurrentThemeProvider>
+		</ContentPageProvider>
 	);
 }
 
