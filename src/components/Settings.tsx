@@ -3,16 +3,15 @@ import CloseIcon from "../assets/CloseIcon";
 import Button from "./Button";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import ContentSettings from "./settings/ContentSettings";
-import ThemeSettings from "./settings/ThemeSettings";
-import GeneralSettings from "./settings/GeneralSettings";
+import SettingsSidebar from "./SettingsSidebar";
+import SettingsContent from "./SettingsContent";
 
 interface props {
 	showSettings: boolean;
 	setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SettingsPages = ["content", "theme", "general"];
+const SettingsPages = ["general", "content", "theme"];
 
 type SettingsPagesType = (typeof SettingsPages)[number];
 
@@ -20,8 +19,11 @@ function Settings({ showSettings, setShowSettings }: props) {
 	const ref = useRef(null);
 
 	const theme = useTheme();
-	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("content");
-	const currentPages = [currentPage, ...SettingsPages.filter(item => !currentPage.includes(item))]
+	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
+	const currentPages = [
+		currentPage,
+		...SettingsPages.filter((item) => !currentPage.includes(item)),
+	];
 
 	useEffect(() => {
 		if (showSettings) {
@@ -54,34 +56,11 @@ function Settings({ showSettings, setShowSettings }: props) {
 		grid-template-columns: 1fr 3fr;
 	`;
 
-	const sideBar = css`
-		background-color: var(${theme.names.contentHeaderBgColor});
-		border-start-start-radius: 8px;
-		border-end-start-radius: 8px;
-		height: 100%;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 1rem;
-	`;
-
 	const closeIcon = css`
 		position: absolute;
 		top: 16px;
 		right: 16px;
 	`;
-
-	const sideBarButton = css`
-		background-color: unset;
-		font-size: 1.25rem;
-		text-transform: capitalize;
-	`;
-
-	const currentPageCSS = css`
-		font-weight: bold;
-	`
 
 	const handleCloseButton = () => {
 		setShowSettings(!showSettings);
@@ -97,42 +76,15 @@ function Settings({ showSettings, setShowSettings }: props) {
 	return (
 		<div css={container} ref={ref}>
 			<div css={page}>
-				<div css={sideBar}>
-					{SettingsPages.map((settingsPage) => (
-						<button
-							css={sideBarButton}
-							data-page={settingsPage}
-							onClick={setSettingsPage}
-						>
-							{settingsPage}
-						</button>
-					))}
-				</div>
-				<div>
-					{currentPages.map((settingsPage) => {
-						if (settingsPage == "content") {
-							return (
-								<ContentSettings
-									currentlyShown={currentPage == "content"}
-								/>
-							);
-						}
-						else if (settingsPage == "theme"){
-							return (
-								<ThemeSettings
-									currentlyShown={currentPage == "theme"}
-								/>
-							);
-						}
-						else if (settingsPage == "general"){
-							return (
-								<GeneralSettings
-									currentlyShown={currentPage == "general"}
-								/>
-							);
-						}
-					})}
-				</div>
+				<SettingsSidebar
+					currentPage={currentPage}
+					SettingsPages={SettingsPages}
+					setSettingsPage={setSettingsPage}
+				/>
+				<SettingsContent
+					currentPage={currentPage}
+					currentPages={currentPages}
+				/>
 				<div css={closeIcon}>
 					<Button onClick={handleCloseButton}>
 						<CloseIcon color={`var(${theme.names.contentFgColor})`} />
