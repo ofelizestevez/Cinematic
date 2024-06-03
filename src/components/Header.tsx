@@ -5,13 +5,13 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { fetchUnsplash } from "../utilities/Helpers";
 import { css, useTheme } from "@emotion/react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useGSAP } from "@gsap/react";
+import { fetchUnsplash } from "../utilities/Helpers";
 import { useCurrentTheme } from "../utilities/CurrentThemeProvider";
 
 interface props {
@@ -37,7 +37,6 @@ function Header({ children }: props) {
 	const { toggleTheme } = useCurrentTheme();
 
 	const SCROLL_HEIGHT_ITEM = "scrollHeight";
-
 
 	// Header CSS Styles
 	const styles = css`
@@ -175,7 +174,7 @@ function Header({ children }: props) {
 			resetScrollPosition();
 			return;
 		}
-		
+
 		// If scrollable, disable scroll appearance
 		// Also save scroll position to localstorage
 		if (isScrollable) {
@@ -185,7 +184,7 @@ function Header({ children }: props) {
 				JSON.stringify(ref.current?.scrollTop)
 			);
 		}
-		// If not scrollable, enable scroll appearance 
+		// If not scrollable, enable scroll appearance
 		else {
 			gsap.fromTo(ref.current, { opacity: 1 }, { opacity: 0.5 });
 		}

@@ -3,24 +3,23 @@ import { ReactNode } from "react";
 
 interface props {
 	children?: ReactNode;
-    onClick?: () => void;
+	onClick?: () => void;
 }
 
-function Button({ children, onClick }: props){
+function Button({ children, onClick }: props) {
+	const theme = useTheme();
 
-    const theme = useTheme();
+	const styles = css`
+		padding: 1rem 1rem;
+		border-radius: 0.5rem;
+		background-color: var(${theme.names.contentHeaderBgColor});
+	`;
 
-    const styles = css`
-        padding: 1rem 1rem;
-        border-radius: 0.5rem;
-        background-color: var(${theme.names.contentHeaderBgColor});
-    `
-
-    return (
-        <button css={styles} onClick={onClick}>
-            {children}
-        </button>
-    )
+	return (
+		<button css={styles} onClick={onClick}>
+			{children}
+		</button>
+	);
 }
 
-export default Button
+export default Button;

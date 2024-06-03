@@ -17,14 +17,17 @@ type SettingsPagesType = (typeof SettingsPages)[number];
 
 function Settings({ showSettings, setShowSettings }: props) {
 	const ref = useRef(null);
-
 	const theme = useTheme();
+
 	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
+	// Variable that reorganizes so the settings pages so that the current page is first
+	// * For Animation Purposes
 	const currentPages = [
 		currentPage,
 		...SettingsPages.filter((item) => !currentPage.includes(item)),
 	];
 
+	// If settings are shown, then display, otherwise hide
 	useEffect(() => {
 		if (showSettings) {
 			gsap.fromTo(ref.current, { opacity: 0 }, { display: "flex", opacity: 1 });
@@ -67,7 +70,6 @@ function Settings({ showSettings, setShowSettings }: props) {
 	};
 
 	const setSettingsPage: MouseEventHandler<HTMLButtonElement> = (e) => {
-		// setCurrentPage()
 		setCurrentPage(
 			(e.target as HTMLButtonElement).getAttribute("data-page") ?? "content"
 		);

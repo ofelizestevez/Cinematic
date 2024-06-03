@@ -1,14 +1,14 @@
 import SettingsPage from "../SettingsPage";
 
 interface props {
-    currentlyShown: boolean;
+	currentlyShown: boolean;
 }
 
-function ThemeSettings ({currentlyShown} : props) {
-    return (
-        <SettingsPage currentlyShown={currentlyShown}>
-            <h1>Theme</h1>
-            {/* 
+function ThemeSettings({ currentlyShown }: props) {
+	return (
+		<SettingsPage currentlyShown={currentlyShown}>
+			<h1>Theme</h1>
+			{/* 
                 Radio ("Dark/Light based off image")
                 Radio ("Dark")
                 Radio ("Light")
@@ -16,9 +16,8 @@ function ThemeSettings ({currentlyShown} : props) {
 
                 If radio, it will show the rest of the inputs
             */}
-            
-        </SettingsPage>
-    )
+		</SettingsPage>
+	);
 }
 
-export default ThemeSettings
+export default ThemeSettings;

@@ -8,7 +8,7 @@ interface props {
 	styles?: SerializedStyles;
 }
 
-function SettingsPage({ children, currentlyShown , styles}: props) {
+function SettingsPage({ children, currentlyShown, styles }: props) {
 	const ref = useRef(null);
 
 	const style = css`
@@ -24,7 +24,7 @@ function SettingsPage({ children, currentlyShown , styles}: props) {
 			gsap.fromTo(
 				ref.current,
 				{ display: "none", opacity: 0 },
-				{ display: "block", opacity: 1},
+				{ display: "block", opacity: 1 }
 			);
 		} else {
 			gsap.to(ref.current, { display: "none", opacity: 0 });

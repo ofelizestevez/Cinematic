@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import SettingsButton from "./buttons/SettingsButton";
 
 interface props {
-    showSettings: boolean
+	showSettings: boolean;
 	setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -37,7 +37,10 @@ function Footer({ showSettings, setShowSettings }: props) {
 			<div css={left}></div>
 			<div css={center}></div>
 			<div css={right}>
-				<SettingsButton showSettings={showSettings} setShowSettings={setShowSettings} />
+				<SettingsButton
+					showSettings={showSettings}
+					setShowSettings={setShowSettings}
+				/>
 			</div>
 		</footer>
 	);

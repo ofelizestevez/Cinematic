@@ -1,15 +1,15 @@
 import SettingsPage from "../SettingsPage";
 
 interface props {
-    currentlyShown: boolean;
+	currentlyShown: boolean;
 }
 
-function GeneralSettings ({currentlyShown} : props) {
-    return (
-        <SettingsPage currentlyShown={currentlyShown}>
-            <h1>General</h1>
-        </SettingsPage>
-    )
+function GeneralSettings({ currentlyShown }: props) {
+	return (
+		<SettingsPage currentlyShown={currentlyShown}>
+			<h1>General</h1>
+		</SettingsPage>
+	);
 }
 
-export default GeneralSettings
+export default GeneralSettings;
