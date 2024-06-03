@@ -6,9 +6,9 @@ const CloudSnowIcon = ({ height = 24, width = 24, color = "#000000"}) => (
     viewBox="0 0 24 24" 
     fill="none" 
     stroke={color} 
-    stroke-width="2" 
-    stroke-linecap="round" 
-    stroke-linejoin="round" >
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round">
         <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"></path>
         <line x1="8" y1="16" x2="8.01" y2="16"></line>
         <line x1="8" y1="20" x2="8.01" y2="20"></line>

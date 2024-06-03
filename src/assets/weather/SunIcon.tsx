@@ -6,9 +6,9 @@ const SunIcon = ({ height = 24, width = 24, color = "#000000"}) => (
     viewBox="0 0 24 24" 
     fill="none" 
     stroke={color}
-    stroke-width="2"
-    stroke-linecap="round" 
-    stroke-linejoin="round" >
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
         <line x1="12" y1="21" x2="12" y2="23"></line>
