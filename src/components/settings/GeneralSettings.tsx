@@ -2,11 +2,12 @@ import SettingsPage from "../SettingsPage";
 
 interface props {
 	currentlyShown: boolean;
+	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 }
 
-function GeneralSettings({ currentlyShown }: props) {
+function GeneralSettings({ currentlyShown, timelineRef }: props) {
 	return (
-		<SettingsPage currentlyShown={currentlyShown}>
+		<SettingsPage currentlyShown={currentlyShown} timelineRef={timelineRef}>
 			<h1>General</h1>
 		</SettingsPage>
 	);

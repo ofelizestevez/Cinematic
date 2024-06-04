@@ -20,12 +20,6 @@ function Settings({ showSettings, setShowSettings }: props) {
 	const theme = useTheme();
 
 	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
-	// Variable that reorganizes so the settings pages so that the current page is first
-	// * For Animation Purposes
-	const currentPages = [
-		currentPage,
-		...SettingsPages.filter((item) => !currentPage.includes(item)),
-	];
 
 	// If settings are shown, then display, otherwise hide
 	useEffect(() => {
@@ -54,6 +48,7 @@ function Settings({ showSettings, setShowSettings }: props) {
 		height: 90%;
 		width: 90%;
 		background-color: var(${theme.names.contentBgColor});
+		color: var(${theme.names.contentFgColor});
 		border-radius: 8px;
 		display: grid;
 		grid-template-columns: 1fr 3fr;
@@ -85,7 +80,7 @@ function Settings({ showSettings, setShowSettings }: props) {
 				/>
 				<SettingsContent
 					currentPage={currentPage}
-					currentPages={currentPages}
+					SettingsPages={SettingsPages}
 				/>
 				<div css={closeIcon}>
 					<Button onClick={handleCloseButton}>

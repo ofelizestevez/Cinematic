@@ -1,6 +1,7 @@
 export enum Providers {
-	LocalStorage,
-	WebDav
+	NONE = "Name",
+	LOCALSTORAGE = "LocalStorage",
+	WEBDAV = "WebDav"
 }
 
 export abstract class Provider {

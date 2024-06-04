@@ -31,6 +31,7 @@ function SettingsSidebar({
 		background-color: unset;
 		font-size: 1.25rem;
 		text-transform: capitalize;
+		color: var(${theme.names.contentFgColor});
 	`;
 
 	const current = css`
@@ -44,6 +45,7 @@ function SettingsSidebar({
 					css={[button, currentPage == settingsPage ? current : ""]}
 					data-page={settingsPage}
 					onClick={setSettingsPage}
+					key={`${settingsPage}-sidebar`}
 				>
 					{settingsPage}
 				</button>

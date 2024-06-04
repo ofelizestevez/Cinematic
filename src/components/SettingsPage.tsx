@@ -6,9 +6,10 @@ interface props {
 	children?: ReactNode;
 	currentlyShown: boolean;
 	styles?: SerializedStyles;
+	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 }
 
-function SettingsPage({ children, currentlyShown, styles }: props) {
+function SettingsPage({ children, currentlyShown, styles, timelineRef }: props) {
 	const ref = useRef(null);
 
 	const style = css`
@@ -21,13 +22,14 @@ function SettingsPage({ children, currentlyShown, styles }: props) {
 
 	useEffect(() => {
 		if (currentlyShown) {
-			gsap.fromTo(
+			timelineRef.current.fromTo(
 				ref.current,
 				{ display: "none", opacity: 0 },
-				{ display: "block", opacity: 1 }
+				{ display: "block", opacity: 1 },
+				">"
 			);
 		} else {
-			gsap.to(ref.current, { display: "none", opacity: 0 });
+			timelineRef.current.to(ref.current, { display: "none", opacity: 0 }, "<");
 		}
 		console.log(currentlyShown);
 	}, [currentlyShown]);

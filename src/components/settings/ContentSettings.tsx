@@ -3,23 +3,59 @@ import SettingsPage from "../SettingsPage";
 import { usePageSources } from "../../utilities/ContentPageContext";
 import Button from "../Button";
 import { css } from "@emotion/react";
+import Input from "../Input";
+import { useEffect } from "react";
+import Theme from "../../utilities/Theme";
+import Dropdown from "../Dropdown";
+import { Providers } from "../../providers/_main";
 
 interface props {
 	currentlyShown: boolean;
+	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 }
 
-function ContentSettings({ currentlyShown }: props) {
+function ContentSettings({ currentlyShown, timelineRef }: props) {
 	const { pageSources, setPageSources } = usePageSources();
 
+	const itemCss = css`
+		/* margin-bottom: 2rem; */
+		padding: 1rem;
+	`
+
+	const columnTitles = css`
+		justify-content: end;
+	`
 	const style = css`
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: auto 1fr 1fr 1fr;
+		gap: 1rem;
 	`;
 
-	const handleAddClick = () => {
-		const x = ["a", "b", "c"];
+	const flex = css`
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	`
 
-		console.log(x.slice(-1)[0]);
+	const detailsCss = css`
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	`
+
+	const contentCss = css`
+		margin: 1rem 0;
+
+		>*:nth-child(2n) {
+			background-color: var(${Theme.names.contentHeaderBgColor});
+		}
+	`
+
+	useEffect(() => {
+		console.log(pageSources);
+	});
+
+	const handleAddClick = () => {
 		setPageSources([
 			...pageSources,
 			{
@@ -34,19 +70,48 @@ function ContentSettings({ currentlyShown }: props) {
 	pageSources.slice(-1);
 
 	return (
-		<SettingsPage currentlyShown={currentlyShown}>
+		<SettingsPage currentlyShown={currentlyShown} timelineRef={timelineRef}>
 			<h1>Content</h1>
-			<div css={style}>
-				<h2>Title</h2>
-				<h2>Source Type</h2>
-				<h2>Source</h2>
-			</div>
-			<ReactSortable list={pageSources} setList={setPageSources}>
+			<ReactSortable list={pageSources} setList={setPageSources} css={contentCss}>
 				{pageSources.map((source) => (
-					<div css={style}>
-						<p>hi</p>
-						<p>hi</p>
-						<p>hi</p>
+					<div key={source.id} css={itemCss} >
+						<div css={flex}>
+							<h2>Title</h2>
+							<Input>
+								<input type="text" />
+							</Input>
+						</div>
+						<div css={style}>
+							<div css={[detailsCss, columnTitles]}>
+								<h2></h2>
+								<h2>Content</h2>
+								<h2>Styles</h2>
+							</div>
+							<div css={detailsCss}>
+								<h2>Type</h2>
+								<Dropdown currentOption="" options={Object.values(Providers)}/>
+							</div>
+
+							<div css={detailsCss}>
+								<h2>Source</h2>
+								<Input>
+									<input type="text" />
+								</Input>
+								<Input>
+									<input type="text" />
+								</Input>
+							</div>
+
+							<div css={detailsCss}>
+								<h2>Save Enabled</h2>
+								<Input>
+									<input type="checkbox" />
+								</Input>
+								<Input>
+									<input type="checkbox" />
+								</Input>
+							</div>
+						</div>
 					</div>
 				))}
 			</ReactSortable>

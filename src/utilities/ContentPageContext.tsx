@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext } from "react";
 import { Page } from "./interfaces";
 
 interface ContentPageContextType {
@@ -25,10 +25,6 @@ export const ContentPageProvider = ({
 		const storedSources = localStorage.getItem("sources");
 		return storedSources ? JSON.parse(storedSources) : [];
 	});
-
-	useEffect(() => {
-		localStorage.setItem("sources", JSON.stringify(pageSources));
-	}, [pageSources]);
 
 	return (
 		<ContentPageContext.Provider value={{ pageSources, setPageSources }}>
