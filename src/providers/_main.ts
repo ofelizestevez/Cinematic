@@ -1,5 +1,5 @@
 export enum Providers {
-	NONE = "Name",
+	NONE = "None",
 	LOCALSTORAGE = "LocalStorage",
 	WEBDAV = "WebDav"
 }

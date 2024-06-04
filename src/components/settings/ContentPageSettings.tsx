@@ -38,7 +38,7 @@ function ContentPageSettings({ currentlyShown, timelineRef , setCurrentlyShowing
 			<div>
 				<h1>Content</h1>
 				<h2>Type</h2>
-				<Dropdown currentOption="none" options={Object.values(Providers)} />
+				<Dropdown currentOption={Providers.NONE} options={Object.values(Providers)} />
 				<h2>Source</h2>
 				<Input>
 					<input type="text" />
@@ -47,7 +47,7 @@ function ContentPageSettings({ currentlyShown, timelineRef , setCurrentlyShowing
 			<div>
 				<h1>Styles</h1>
 				<h2>Type</h2>
-				<Dropdown currentOption="none" options={Object.values(Providers)} />
+				<Dropdown currentOption={Providers.NONE} options={Object.values(Providers)} />
 				<h2>Source</h2>
 				<Input>
 					<input type="text" />
