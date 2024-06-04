@@ -1,6 +1,11 @@
 export interface Page {
     id: number,
     title: string,
-    sourceType: "" | "localstorage" | "webdav"
+    style: Source,
+    content: Source
+}
+
+export interface Source {
+    type: "none" | "localstorage" | "webdav"
     source?: any
 }

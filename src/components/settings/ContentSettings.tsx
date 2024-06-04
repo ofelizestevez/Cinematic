@@ -4,122 +4,113 @@ import { usePageSources } from "../../utilities/ContentPageContext";
 import Button from "../Button";
 import { css } from "@emotion/react";
 import Input from "../Input";
-import { useEffect } from "react";
-import Theme from "../../utilities/Theme";
-import Dropdown from "../Dropdown";
-import { Providers } from "../../providers/_main";
+import { MouseEventHandler, useState } from "react";
+import { Page } from "../../utilities/interfaces";
+import ContentPageSettings from "./ContentPageSettings";
 
 interface props {
 	currentlyShown: boolean;
 	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 }
 
+const subpages = ["main", "pageSettings"];
+
 function ContentSettings({ currentlyShown, timelineRef }: props) {
+	const [currentlyShowing, setCurrentlyShowing] = useState("main");
 	const { pageSources, setPageSources } = usePageSources();
+	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
+		null
+	);
+
+	const currentPages = [
+		...subpages.filter((item) => !currentlyShowing.includes(item)),
+		currentlyShowing,
+	];
 
 	const itemCss = css`
 		/* margin-bottom: 2rem; */
 		padding: 1rem;
-	`
-
-	const columnTitles = css`
-		justify-content: end;
-	`
-	const style = css`
-		display: grid;
-		grid-template-columns: auto 1fr 1fr 1fr;
-		gap: 1rem;
 	`;
-
-	const flex = css`
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	`
-
-	const detailsCss = css`
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	`
 
 	const contentCss = css`
 		margin: 1rem 0;
-
-		>*:nth-child(2n) {
-			background-color: var(${Theme.names.contentHeaderBgColor});
-		}
-	`
-
-	useEffect(() => {
-		console.log(pageSources);
-	});
+	`;
 
 	const handleAddClick = () => {
 		setPageSources([
 			...pageSources,
 			{
 				id: (pageSources.slice(-1)[0]?.id ?? 0) + 1,
-				title: "",
-				sourceType: "",
-				source: "",
+				title: "Untitled",
+				content: {
+					type: "none",
+					source: "",
+				},
+				style: {
+					type: "none",
+					source: "",
+				},
 			},
 		]);
 	};
 
-	pageSources.slice(-1);
+	const handlePageEditButton: MouseEventHandler = (e) => {
+		const target = e.target as HTMLElement;
+		const pageId = target.getAttribute("data-id") ?? 0;
+		const selectedPage =
+			pageSources.find((item) => item.id == pageId) ?? pageSources[0];
+
+		setCurrentContentPage(selectedPage);
+		setCurrentlyShowing("pageSettings");
+	};
 
 	return (
-		<SettingsPage currentlyShown={currentlyShown} timelineRef={timelineRef}>
-			<h1>Content</h1>
-			<ReactSortable list={pageSources} setList={setPageSources} css={contentCss}>
-				{pageSources.map((source) => (
-					<div key={source.id} css={itemCss} >
-						<div css={flex}>
-							<h2>Title</h2>
-							<Input>
-								<input type="text" />
-							</Input>
-						</div>
-						<div css={style}>
-							<div css={[detailsCss, columnTitles]}>
-								<h2></h2>
-								<h2>Content</h2>
-								<h2>Styles</h2>
-							</div>
-							<div css={detailsCss}>
-								<h2>Type</h2>
-								<Dropdown currentOption="" options={Object.values(Providers)}/>
-							</div>
+		<div>
+			{currentPages.map((page) => {
+				if (page == "main") {
+					return (
+						<SettingsPage
+							currentlyShown={currentlyShown && currentlyShowing == "main"}
+							timelineRef={timelineRef}
+						>
+							<h1>Content</h1>
+							<ReactSortable
+								list={pageSources}
+								setList={setPageSources}
+								css={contentCss}
+							>
+								{pageSources.map((source) => (
+									<div key={source.id} css={itemCss}>
+										<p>{source.title}</p>
+										<Input>
+											<button
+												data-id={source.id}
+												onClick={handlePageEditButton}
+											>
+												test
+											</button>
+										</Input>
+									</div>
+								))}
+							</ReactSortable>
 
-							<div css={detailsCss}>
-								<h2>Source</h2>
-								<Input>
-									<input type="text" />
-								</Input>
-								<Input>
-									<input type="text" />
-								</Input>
-							</div>
-
-							<div css={detailsCss}>
-								<h2>Save Enabled</h2>
-								<Input>
-									<input type="checkbox" />
-								</Input>
-								<Input>
-									<input type="checkbox" />
-								</Input>
-							</div>
-						</div>
-					</div>
-				))}
-			</ReactSortable>
-
-			<Button onClick={handleAddClick}>
-				<p>Add Source</p>
-			</Button>
-		</SettingsPage>
+							<Button onClick={handleAddClick}>
+								<p>Add Source</p>
+							</Button>
+						</SettingsPage>
+					);
+				} else if (page == "pageSettings") {
+					return (
+						<ContentPageSettings
+							page={currentContentPage ?? pageSources[0]}
+							currentlyShown={currentlyShowing == "pageSettings"}
+							setCurrentlyShowing={setCurrentlyShowing}
+							timelineRef={timelineRef}
+						></ContentPageSettings>
+					);
+				}
+			})}
+		</div>
 	);
 }
 

@@ -3,6 +3,7 @@ import ContentSettings from "./settings/ContentSettings";
 import GeneralSettings from "./settings/GeneralSettings";
 import ThemeSettings from "./settings/ThemeSettings";
 import gsap from "gsap";
+import { css } from "@emotion/react";
 
 interface props {
 	currentPage: string;
@@ -19,8 +20,11 @@ function SettingsContent({ currentPage, SettingsPages }: props) {
 		currentPage,
 	];
 
+	const style = css`
+		position: relative;
+	`;
 	return (
-		<div>
+		<div css={style}>
 			{currentPages.map((settingsPage) => {
 				if (settingsPage == "content") {
 					return (
