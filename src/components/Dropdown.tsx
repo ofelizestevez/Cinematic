@@ -10,7 +10,8 @@ function Dropdown ({currentOption, options} : props) {
     const [currentlyShown, setCurrentlyShown] = useState(false)
 
     const dropdownMenu = css`
-        display: ${currentlyShown ? "block" : "none"};    
+        display: ${currentlyShown ? "flex" : "none"};
+        flex-direction: column;
     `
 
     const handleMainButtonClick = () => {
@@ -19,7 +20,7 @@ function Dropdown ({currentOption, options} : props) {
 
     return <div>
         <Input>
-            <button onClick={handleMainButtonClick}>{currentOption == "" ? "None": currentOption}</button>
+            <button onClick={handleMainButtonClick}>{currentOption}</button>
         </Input>
         <div css={dropdownMenu}>
             {options.filter((item) => !currentOption.includes(item)).map((item) => (
