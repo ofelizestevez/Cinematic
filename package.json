@@ -15,6 +15,7 @@
     "axios": "^1.6.8",
     "colord": "^2.9.3",
     "fast-average-color": "^9.4.0",
+    "lz-string": "^1.5.0",
     "rc-collapse": "^3.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
