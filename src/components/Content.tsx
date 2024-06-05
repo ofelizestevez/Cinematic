@@ -1,5 +1,5 @@
 import { css, useTheme } from "@emotion/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 
 interface props {
 	children?: ReactNode;
@@ -13,9 +13,6 @@ function Content({ children }: props) {
 		height: calc(100vh - ${theme.sizes.headerHeight});
 	`;
 
-	useEffect(() => {
-		console.log(theme);
-	});
 	return <section css={styles}>{children}</section>;
 }
 

@@ -3,19 +3,19 @@ import { ReactNode } from "react";
 
 interface props {
     children?: ReactNode
+    inputRef? : React.RefObject<any>
 }
-function Input ({children} : props) {
+function Input ({children, inputRef} : props) {
 
     const theme = useTheme();
     
     const style = css`
         * {
             color: var(${theme.names.contentFgColor});
-            background-color: unset;
-            border: solid 2px var(${theme.names.contentFgColor});
+            background-color: var(${theme.names.contentHeaderBgColor});
             margin: 0 2px;
             font-size: 1rem;
-            padding: 0.25rem;
+            padding: 0.75rem 0.5rem;
             border-radius: 0.5rem;
         }
 
@@ -24,7 +24,7 @@ function Input ({children} : props) {
         }
     `
     return (
-        <div css={style}>
+        <div css={style} ref={inputRef}>
             {children}
         </div>
     )

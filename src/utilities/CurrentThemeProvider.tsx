@@ -38,7 +38,6 @@ export const CurrentThemeProvider = ({
 		// Modify toggleTheme function
 
 		if (currentTheme != theme) {
-			console.log(Theme.colors[theme as "dark" | "light"])
             gsap.to(document.documentElement, {
                 "--contentFgColor": Theme.colors[theme as "dark" | "light"].contentFgColor,
                 "--contentBgColor": Theme.colors[theme as "dark" | "light"].contentBgColor,
@@ -47,7 +46,6 @@ export const CurrentThemeProvider = ({
             })
 		}
 		setCurrentTheme(theme);
-		console.log(theme);
 	};
 
 	return (

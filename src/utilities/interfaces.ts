@@ -1,3 +1,5 @@
+import { Providers } from "../providers/_main"
+
 export interface Page {
     id: number,
     title: string,
@@ -6,6 +8,7 @@ export interface Page {
 }
 
 export interface Source {
-    type: "none" | "localstorage" | "webdav"
+    type: Providers
     source?: any
+    saveEnabled: boolean
 }

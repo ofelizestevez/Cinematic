@@ -12,7 +12,6 @@ function SettingsButton ({showSettings, setShowSettings} : props) {
     const theme = useTheme();
 
     const handleClick = () => {
-        console.log("HELLO")
         setShowSettings(!showSettings)
     }
 

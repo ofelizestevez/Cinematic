@@ -2,11 +2,14 @@ import { ReactSortable } from "react-sortablejs";
 import SettingsPage from "../SettingsPage";
 import { usePageSources } from "../../utilities/ContentPageContext";
 import Button from "../Button";
-import { css } from "@emotion/react";
-import Input from "../Input";
-import { MouseEventHandler, useState } from "react";
+import { css, useTheme } from "@emotion/react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
+import { Providers } from "../../providers/_main";
+import LeftArrowIcon from "../../assets/LeftArrowIcon";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 interface props {
 	currentlyShown: boolean;
@@ -16,11 +19,29 @@ interface props {
 const subpages = ["main", "pageSettings"];
 
 function ContentSettings({ currentlyShown, timelineRef }: props) {
+	const theme = useTheme();
+	
 	const [currentlyShowing, setCurrentlyShowing] = useState("main");
 	const { pageSources, setPageSources } = usePageSources();
 	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
 		null
 	);
+
+	const backButtonRef = useRef(null)
+
+	useGSAP(() => {
+		if (currentlyShowing == "main"){
+			gsap.to(backButtonRef.current, {opacity: 0})
+		}
+		else {
+			gsap.to(backButtonRef.current, {opacity: 1})
+		}
+	}, [currentlyShowing])
+	const backIcon = css`
+		position: absolute;
+		top: 16px;
+		left: 16px;
+	`;
 
 	const currentPages = [
 		...subpages.filter((item) => !currentlyShowing.includes(item)),
@@ -28,6 +49,9 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 	];
 
 	const itemCss = css`
+		display: flex;
+		align-items: center;
+		gap: 1rem;
 		/* margin-bottom: 2rem; */
 		padding: 1rem;
 	`;
@@ -36,6 +60,20 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 		margin: 1rem 0;
 	`;
 
+	const savePage = (page: Page) => {
+		const newPageSources = pageSources;
+		newPageSources[pageSources.indexOf(currentContentPage!)] = page;
+
+		setPageSources(newPageSources);
+		setCurrentContentPage(null);
+		setCurrentlyShowing("main");
+	};
+
+	const handleBackButton = () => {
+		setCurrentlyShowing("main");
+		setCurrentContentPage(null);
+	};
+	
 	const handleAddClick = () => {
 		setPageSources([
 			...pageSources,
@@ -43,12 +81,14 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 				id: (pageSources.slice(-1)[0]?.id ?? 0) + 1,
 				title: "Untitled",
 				content: {
-					type: "none",
+					type: Providers.NONE,
 					source: "",
+					saveEnabled: false,
 				},
 				style: {
-					type: "none",
+					type: Providers.NONE,
 					source: "",
+					saveEnabled: false,
 				},
 			},
 		]);
@@ -72,6 +112,7 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 						<SettingsPage
 							currentlyShown={currentlyShown && currentlyShowing == "main"}
 							timelineRef={timelineRef}
+							key={"main-ContentSettings"}
 						>
 							<h1>Content</h1>
 							<ReactSortable
@@ -82,14 +123,9 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 								{pageSources.map((source) => (
 									<div key={source.id} css={itemCss}>
 										<p>{source.title}</p>
-										<Input>
-											<button
-												data-id={source.id}
-												onClick={handlePageEditButton}
-											>
-												test
-											</button>
-										</Input>
+										<Button data-id={source.id} onClick={handlePageEditButton}>
+											Edit Page
+										</Button>
 									</div>
 								))}
 							</ReactSortable>
@@ -99,17 +135,27 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 							</Button>
 						</SettingsPage>
 					);
-				} else if (page == "pageSettings") {
+				} else if (page == "pageSettings" && currentContentPage) {
 					return (
 						<ContentPageSettings
-							page={currentContentPage ?? pageSources[0]}
-							currentlyShown={currentlyShowing == "pageSettings"}
+							page={currentContentPage}
+							setCurrentContentPage={savePage}
+							currentlyShown={
+								currentlyShown && currentlyShowing == "pageSettings"
+							}
 							setCurrentlyShowing={setCurrentlyShowing}
 							timelineRef={timelineRef}
+							key={"pageSettings-ContentSettings"}
 						></ContentPageSettings>
 					);
 				}
 			})}
+
+			<div ref={backButtonRef} css={backIcon} style={{opacity: 0}}>
+				<Button onClick={handleBackButton}>
+					<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
+				</Button>
+			</div>
 		</div>
 	);
 }

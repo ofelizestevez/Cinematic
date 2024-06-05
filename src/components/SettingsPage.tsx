@@ -1,6 +1,5 @@
 import { SerializedStyles, css } from "@emotion/react";
 import { ReactNode, useEffect, useRef } from "react";
-import gsap from "gsap";
 
 interface props {
 	children?: ReactNode;
@@ -31,7 +30,6 @@ function SettingsPage({ children, currentlyShown, styles, timelineRef }: props) 
 		} else {
 			timelineRef.current.to(ref.current, { display: "none", opacity: 0 }, "<");
 		}
-		console.log(currentlyShown);
 	}, [currentlyShown]);
 
 	return (
