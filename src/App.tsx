@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer.tsx";
@@ -11,20 +11,34 @@ import CloseIcon from "./assets/CloseIcon.tsx";
 import Button from "./components/Button.tsx";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ThemeNames, ThemeVariables } from "./utilities/Theme.ts";
+import { themeToObject } from "./utilities/Helpers.ts";
+
+const closeIcon = css`
+	position: absolute;
+	top: 16px;
+	right: 16px;
+`;
 
 function App() {
-	const theme = useTheme();
 	const [showSettings, setShowSettings] = useState(false);
 	const { setPageSources } = usePageSources();
 	const { initialized, setInitialized } = useInitialized();
+	const [theme, setTheme] = useState<ThemeNames>(localStorage.getItem("currentTheme") as  ThemeNames | null ?? ThemeNames.LIGHT)
 
+	useGSAP(() => {
+		localStorage.setItem("currentTheme", JSON.stringify(theme))
+
+		if (initialized){
+			const themeVariableValues = (themeToObject(theme))
+			gsap.to(":root", themeVariableValues)
+		}
+
+		console.log(theme)
+		// gsap.to(":root", {})
+	}, [theme])
+	
 	const settingsRef = useRef(null);
-
-	const closeIcon = css`
-		position: absolute;
-		top: 16px;
-		right: 16px;
-	`;
 
 	const openSettings = () => {
 		setShowSettings(true);
@@ -63,7 +77,7 @@ function App() {
 
 	return (
 		<>
-			<Header />
+			<Header setTheme={setTheme}/>
 			<Content />
 
 			{showSettings && (
@@ -72,7 +86,7 @@ function App() {
 						<Settings>
 							<div css={closeIcon}>
 								<Button onClick={closeSettings}>
-									<CloseIcon color={`var(${theme.names.contentFgColor})`} />
+									<CloseIcon color={`var(${ThemeVariables.contentFgColor})`} />
 								</Button>
 							</div>
 						</Settings>
@@ -86,3 +100,4 @@ function App() {
 }
 
 export default App;
+

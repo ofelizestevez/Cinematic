@@ -1,3 +1,61 @@
+export enum ThemeVariables {
+	contentFgColor = "--contentFgColor",
+	contentBgColor = "--contentBgColor",
+	contentHeaderBgColor = "--contentHeaderBgColor",
+	contentHeaderShadow = "--contentHeaderShadow",
+	alertBgColor = "--alertBgColor",
+	alertFgColor = "--alertFgColor",
+}
+
+// uh temp name
+export enum ThemeNames {
+	LIGHT,
+	DARK,
+	CUSTOM,
+}
+
+export interface ThemeDetails {
+	contentFgColor: string;
+	contentBgColor: string;
+	contentHeaderBgColor: string;
+	contentHeaderShadow: string;
+	alertBgColor: string;
+	alertFgColor: string;
+}
+
+export const darkTheme: ThemeDetails = {
+	contentFgColor: "#FFFFFF",
+	contentBgColor: "#080808",
+	contentHeaderBgColor: "#1A1A1A",
+	contentHeaderShadow: "unset",
+	alertBgColor: "#E02929",
+	alertFgColor: "#FFFFFF"
+};
+
+export const lightTheme: ThemeDetails = {
+	contentFgColor: "#000000",
+	contentBgColor: "#F0F0F0",
+	contentHeaderBgColor: "#FFFFFF",
+	contentHeaderShadow: `
+	0px 11px 25px 0px rgba(0, 0, 0, 0.06), 
+	0px 45px 45px 0px rgba(0, 0, 0, 0.05), 
+	0px 101px 60px 0px rgba(0, 0, 0, 0.03), 
+	0px 179px 72px 0px rgba(0, 0, 0, 0.01), 
+	0px 280px 78px 0px rgba(0, 0, 0, 0.00) 
+	`,
+	alertBgColor: "#F25757",
+	alertFgColor: "#000000"
+};
+
+export const themeSizes = {
+	headerHeight: "40vh",
+	buttonPaddingHeight: "1rem",
+	buttonPaddingWidth: "2rem",
+	buttonBottom: "1rem",
+	buttonGap: "1rem",
+	contentHeaderPaddingHeight: "2rem",
+};
+
 const Theme = {
 	names: {
 		headerHeight: "--headerHeight",
@@ -9,7 +67,7 @@ const Theme = {
 		contentFgColor: "--contentFgColor",
 		contentBgColor: "--contentBgColor",
 		contentHeaderBgColor: "--contentHeaderBgColor",
-		contentHeaderShadow: "--contentHeaderShadow"
+		contentHeaderShadow: "--contentHeaderShadow",
 	},
 	sizes: {
 		headerHeight: "40vh",
@@ -25,7 +83,7 @@ const Theme = {
 			contentBgColor: "#080808",
 			contentHeaderBgColor: "#1A1A1A",
 			contentHeaderShadow: "unset",
-			alert: "#E02929"
+			alert: "#E02929",
 		},
 		light: {
 			contentFgColor: "#000000",
@@ -38,9 +96,9 @@ const Theme = {
             0px 179px 72px 0px rgba(0, 0, 0, 0.01), 
             0px 280px 78px 0px rgba(0, 0, 0, 0.00) 
             `,
-			alert: "#F25757"
+			alert: "#F25757",
 		},
 	},
 };
 
-export default Theme
+export default Theme;

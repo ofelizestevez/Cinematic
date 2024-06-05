@@ -9,16 +9,24 @@ import SourceSettingsSection from "./SourceSettingsSection";
 interface props {
 	page: Page;
 	setCurrentContentPage: (page: Page) => void;
-	children: ReactNode
+	children: ReactNode;
 }
 
-function ContentPageSettings({
-	page,
-	setCurrentContentPage,
-	children
-}: props) {
+const style = css`
+	> * {
+		margin-bottom: 1rem;
+	}
+
+	> * > div {
+		margin-bottom: 0.25rem;
+	}
+`;
+
+function ContentPageSettings({ page, setCurrentContentPage, children }: props) {
 	const [pageTitle, setPageTitle] = useState<string>(page.title);
-	const [contentSource, setContentSource] = useState<string>(page.content.source);
+	const [contentSource, setContentSource] = useState<string>(
+		page.content.source
+	);
 	const [contentTypeOption, setContentTypeOption] = useState<string>(
 		page.content.type
 	);
@@ -32,17 +40,6 @@ function ContentPageSettings({
 	const [saveStyleEnabled, setStyleSavedEnabled] = useState(
 		page.style.saveEnabled
 	);
-
-	const style = css`
-		> * {
-			margin-bottom: 1rem;
-		}
-
-		> * > div {
-			margin-bottom: 0.25rem;
-		}
-	`;
-
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setPageTitle(event.target.value);
@@ -68,9 +65,7 @@ function ContentPageSettings({
 	};
 
 	return page ? (
-		<SettingsPage
-			styles={style}
-		>
+		<SettingsPage styles={style}>
 			<Input>
 				<button onClick={handleSave}>Save</button>
 			</Input>

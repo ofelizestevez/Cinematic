@@ -5,20 +5,28 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
 import { fetchUnsplash } from "../utilities/Helpers";
-import { useCurrentTheme } from "../utilities/CurrentThemeProvider";
+import { ThemeNames, themeSizes } from "../utilities/Theme";
 
 interface props {
 	children?: ReactNode;
+	setTheme: React.Dispatch<React.SetStateAction<ThemeNames>>;
 }
 
-function Header({ children }: props) {
+// Image CSS Styles
+const image = css`
+position: absolute;
+width: 100%;
+top: 0;
+`;
+
+function Header({ children, setTheme  }: props) {
 	// Refenrences for Header, Image Children, and GSAP Timeline
 	const ref = useRef<HTMLElement>(null);
 	const imageRef = useRef<HTMLImageElement>(null);
@@ -33,8 +41,6 @@ function Header({ children }: props) {
 	const [isScrollable, setScrollable] = useState(false);
 
 	// Variables for themes
-	const theme = useTheme();
-	const { toggleTheme } = useCurrentTheme();
 
 	const SCROLL_HEIGHT_ITEM = "scrollHeight";
 
@@ -43,20 +49,13 @@ function Header({ children }: props) {
 		position: relative;
 		overflow: ${isScrollable ? "scroll" : "hidden"};
 		opacity: ${backgroundImage ? "100%" : "0%"};
-		height: ${theme.sizes.headerHeight};
+		height: ${themeSizes.headerHeight};
 
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 		&::-webkit-scrollbar {
 			display: none;
 		}
-	`;
-
-	// Image CSS Styles
-	const image = css`
-		position: absolute;
-		width: 100%;
-		top: 0;
 	`;
 
 	// Registering scroll plugin
@@ -89,13 +88,14 @@ function Header({ children }: props) {
 	};
 
 	// Gets the fast color average of the backgroundImage, then determines light/dark
-	const setTheme = () => {
+	const headerSetTheme = () => {
 		const fac = new FastAverageColor();
 
 		fac.getColorAsync(imageRef.current, {}).then((color) => {
 			// Takes the color, turns it into a Colord to use .isDark()
 			const colord = new Colord(color.hex);
-			toggleTheme(colord.isDark() ? "dark" : "light");
+			console.log(colord.isDark())
+			setTheme(colord.isDark() ? ThemeNames.DARK : ThemeNames.LIGHT);
 		});
 	};
 
@@ -142,7 +142,7 @@ function Header({ children }: props) {
 	const onImageLoad = () => {
 		// Things to always do on image load
 		setInitialScrollPosition();
-		setTheme();
+		headerSetTheme();
 
 		// Prevents from running at initial load
 		// Only continue if in "beating animation"

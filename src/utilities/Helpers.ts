@@ -2,6 +2,25 @@ import axios from "axios";
 import { Page } from "./interfaces";
 import { Providers } from "../providers/_main";
 import { WebDav } from "../providers/WebDav";
+import { ThemeNames, ThemeVariables, darkTheme, lightTheme } from "./Theme";
+
+export const themeToObject = (theme : ThemeNames) => {
+    const themeDetails = (() => {
+        if (theme == ThemeNames.DARK){
+            return darkTheme
+        }
+        return lightTheme
+    })()
+
+    const themeVariableValues : any = {}
+    Object.keys(themeDetails).map((themeDetailsVariable) => {
+        const themeVariableName = ThemeVariables[themeDetailsVariable as keyof typeof ThemeVariables]
+        
+        themeVariableValues[themeVariableName] = themeDetails[themeDetailsVariable as keyof typeof themeDetails]
+    })
+
+    return themeVariableValues
+}
 
 export const pageToProvider = (source : Page) => {
     if (source.content.type == Providers.WEBDAV){

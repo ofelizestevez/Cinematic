@@ -1,45 +1,45 @@
 import { MouseEventHandler, useRef, useState } from "react";
 import Input from "./Input";
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
+import { ThemeVariables } from "../utilities/Theme";
 
 interface props {
 	currentOption: string;
 	setCurrentOption: React.Dispatch<React.SetStateAction<string>>;
 	options: string[];
 }
+
+const style = css`
+	position: relative;
+`;
+
 function Dropdown({ currentOption, setCurrentOption, options }: props) {
 	const [currentlyShown, setCurrentlyShown] = useState(false);
 
-	const theme = useTheme();
-
 	const dropdownRef = useRef<HTMLDivElement>(null);
-    const mainButtonRef = useRef<HTMLButtonElement>(null);
-	const style = css`
-		position: relative;
-	`;
+	const mainButtonRef = useRef<HTMLButtonElement>(null);
 
 	const dropdownMenu = css`
 		position: absolute;
 		margin-top: 0.5rem;
 		display: ${currentlyShown ? "flex" : "none"};
 		flex-direction: column;
-		background-color: var(${theme.names.contentHeaderBgColor});
+		background-color: var(${ThemeVariables.contentHeaderBgColor});
 		border-radius: 0.5rem;
 		padding: 1rem;
 		gap: 1rem;
 
 		button {
 			background-color: unset;
-			color: var(${theme.names.contentFgColor});
+			color: var(${ThemeVariables.contentFgColor});
 			z-index: 2;
 		}
 	`;
 	function handleClickOutside(event: MouseEvent) {
-
 		if (
 			dropdownRef.current &&
-            (mainButtonRef.current === event.target ||
-			!dropdownRef.current.contains(event.target as Node) )
+			(mainButtonRef.current === event.target ||
+				!dropdownRef.current.contains(event.target as Node))
 		) {
 			setCurrentlyShown(false);
 		}
@@ -60,7 +60,7 @@ function Dropdown({ currentOption, setCurrentOption, options }: props) {
 	return (
 		<div css={style} ref={dropdownRef}>
 			<Input inputRef={mainButtonRef}>
-				<button onClick={handleMainButtonClick} >{currentOption}</button>
+				<button onClick={handleMainButtonClick}>{currentOption}</button>
 			</Input>
 			<div css={dropdownMenu}>
 				{options

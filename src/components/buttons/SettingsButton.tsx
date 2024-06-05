@@ -1,20 +1,17 @@
-import { useTheme } from "@emotion/react";
-import SettingsIcon from "../../assets/SettingsIcon"
-import Button from "../Button"
+import SettingsIcon from "../../assets/SettingsIcon";
+import Button from "../Button";
+import { ThemeVariables } from "../../utilities/Theme";
 
 interface props {
-    openSettings: () => void;
+	openSettings: () => void;
 }
-// 
-function SettingsButton ({ openSettings }: props) {
-    
-    const theme = useTheme();
-
-    return (
-        <Button onClick={openSettings}>
-            <SettingsIcon color={`var(${theme.names.contentFgColor})`}/>
-        </Button>
-    )
+//
+function SettingsButton({ openSettings }: props) {
+	return (
+		<Button onClick={openSettings}>
+			<SettingsIcon color={`var(${ThemeVariables.contentFgColor})`} />
+		</Button>
+	);
 }
 
-export default SettingsButton
+export default SettingsButton;

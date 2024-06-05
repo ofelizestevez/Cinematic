@@ -1,20 +1,19 @@
 import SquareIconChecked from "../assets/SquareIconChecked"
 import SquareIcon from "../assets/SquareIcon"
-import { useTheme } from "@emotion/react"
+import { ThemeVariables } from "../utilities/Theme"
 
 interface props {
     isChecked: boolean
     setIsChecked: React.Dispatch<React.SetStateAction<boolean>>
 }
 function Checkbox ({isChecked, setIsChecked} : props) {
-    const theme = useTheme();
 
     const handleCheckboxClick = () => {
         setIsChecked(!isChecked)
     }
     return (
         <div onClick={handleCheckboxClick} style={{ cursor: 'pointer' }}>
-            {isChecked ? <SquareIconChecked color={`var(${theme.names.contentFgColor})`}/> : <SquareIcon color={`var(${theme.names.contentFgColor})`}/>}
+            {isChecked ? <SquareIconChecked color={`var(${ThemeVariables.contentFgColor})`}/> : <SquareIcon color={`var(${ThemeVariables.contentFgColor})`}/>}
         </div>
     )
 }

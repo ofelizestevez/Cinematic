@@ -14,50 +14,51 @@ interface props {
 	currentPage: SettingsPage;
 }
 
+const style = css`
+	position: relative;
+`;
+
 function SettingsContent({ currentPage }: props) {
-	const [previousPage, setPreviousPage] = useState<SettingsPage | null>(currentPage);
-	
-	const container = useRef(null)
+	const [previousPage, setPreviousPage] = useState<SettingsPage | null>(
+		currentPage
+	);
+
+	const container = useRef(null);
 	const { initialized } = useInitialized();
 	const { pageSources } = usePageSources();
 
+	useGSAP(
+		() => {
+			gsap.fromTo(container.current, { opacity: 1 }, { opacity: 0 });
+			setPreviousPage(currentPage);
+		},
+		{ dependencies: [currentPage] }
+	);
 
 	useGSAP(
 		() => {
-			gsap.fromTo(container.current, {opacity: 1}, {opacity: 0})
-			setPreviousPage(currentPage)
-			console.log("FADE OUT")
+			gsap.fromTo(container.current, { opacity: 0 }, { opacity: 1 });
 		},
-		{ dependencies: [currentPage] }
-	)
-
-	useGSAP(() => {
-		console.log("FADE IN")	
-		gsap.fromTo(container.current, {opacity: 0}, {opacity: 1})	
-	}, {dependencies: [previousPage]})
+		{ dependencies: [previousPage] }
+	);
 
 	useEffect(() => {
-		// console.log("YEO")
-		if (initialized){
+		if (initialized) {
 			const settings = {
-				"pages": pageSources
-			}
-			const jsonSettings = JSON.stringify(settings)
-			localStorage.setItem("settings", jsonSettings)
+				pages: pageSources,
+			};
+			const jsonSettings = JSON.stringify(settings);
+			localStorage.setItem("settings", jsonSettings);
 		}
-	}, [pageSources])
-
-	const style = css`
-		position: relative;
-	`;
+	}, [pageSources]);
 
 	return (
 		<div ref={container} css={style}>
-			{currentPage == SettingsPage.GENERAL && <GeneralSettings/>}
+			{currentPage == SettingsPage.GENERAL && <GeneralSettings />}
 			{currentPage == SettingsPage.CONTENT && <ContentSettings />}
-			{currentPage == SettingsPage.THEME && <ThemeSettings/>}
+			{currentPage == SettingsPage.THEME && <ThemeSettings />}
 		</div>
-	)
+	);
 }
 
 export default SettingsContent;

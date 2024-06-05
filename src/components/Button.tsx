@@ -1,6 +1,6 @@
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { MouseEventHandler, ReactNode } from "react";
-
+import { ThemeVariables } from "../utilities/Theme";
 
 interface Props {
 	children?: ReactNode;
@@ -8,15 +8,14 @@ interface Props {
 	[key: string]: any;
 }
 
-function Button({ children, onClick, ...props}: Props) {
-	const theme = useTheme();
+const styles = css`
+	padding: 1rem 1rem;
+	border-radius: 0.5rem;
+	background-color: var(${ThemeVariables.contentHeaderBgColor});
+	color: var(${ThemeVariables.contentFgColor});
+`;
 
-	const styles = css`
-		padding: 1rem 1rem;
-		border-radius: 0.5rem;
-		background-color: var(${theme.names.contentHeaderBgColor});
-		color: var(${theme.names.contentFgColor});
-	`;
+function Button({ children, onClick, ...props }: Props) {
 
 	return (
 		<button css={styles} onClick={onClick} {...props}>

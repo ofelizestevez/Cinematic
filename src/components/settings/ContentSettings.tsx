@@ -2,7 +2,7 @@ import { ReactSortable } from "react-sortablejs";
 import SettingsPage from "../SettingsPage";
 import { usePageSources } from "../../utilities/ContentPageContext";
 import Button from "../Button";
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { MouseEventHandler, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
@@ -10,14 +10,31 @@ import { Providers } from "../../providers/_main";
 import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ThemeVariables } from "../../utilities/Theme";
 
 enum PAGE {
 	MAIN,
-	INDVPAGESETTINGS
+	INDVPAGESETTINGS,
 }
 
+const backIcon = css`
+	position: absolute;
+	top: 16px;
+	left: 16px;
+`;
+
+const itemCss = css`
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+`;
+
+const contentCss = css`
+	margin: 1rem 0;
+`;
+
 function ContentSettings() {
-	const theme = useTheme();
 	const ref = useRef(null);
 	const initializedRef = useRef(false);
 
@@ -27,31 +44,20 @@ function ContentSettings() {
 	);
 	const { pageSources, setPageSources } = usePageSources();
 
-	const backIcon = css`
-		position: absolute;
-		top: 16px;
-		left: 16px;
-	`;
-
-	const itemCss = css`
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem;
-	`;
-
-	const contentCss = css`
-		margin: 1rem 0;
-	`;
-
-	useGSAP(() => {
-		if (initializedRef.current){
-			gsap.fromTo(ref.current, {opacity: 0, duration: 0.5},{opacity: 1, duration: 0.5})
-		}
-		else {
-			initializedRef.current = true
-		}
-	}, {dependencies: [currentContentPage, currentlyShowing]})
+	useGSAP(
+		() => {
+			if (initializedRef.current) {
+				gsap.fromTo(
+					ref.current,
+					{ opacity: 0, duration: 0.5 },
+					{ opacity: 1, duration: 0.5 }
+				);
+			} else {
+				initializedRef.current = true;
+			}
+		},
+		{ dependencies: [currentContentPage, currentlyShowing] }
+	);
 
 	const savePage = (page: Page) => {
 		const newPageSources = pageSources;
@@ -110,13 +116,13 @@ function ContentSettings() {
 
 	return (
 		<div ref={ref}>
-			{currentlyShowing == PAGE.INDVPAGESETTINGS && currentContentPage &&  (
+			{currentlyShowing == PAGE.INDVPAGESETTINGS && currentContentPage && (
 				<ContentPageSettings
 					page={currentContentPage}
 					setCurrentContentPage={savePage}
 				>
 					<Button css={backIcon} onClick={handleBackButton}>
-						<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
+						<LeftArrowIcon color={`var(${ThemeVariables.contentFgColor})`} />
 					</Button>
 				</ContentPageSettings>
 			)}
