@@ -1,5 +1,5 @@
 import { SerializedStyles, css } from "@emotion/react";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
 
 interface props {
 	children?: ReactNode;

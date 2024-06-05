@@ -15,7 +15,7 @@ interface props {
 	SettingsPages: string[];
 }
 
-function SettingsContent({ currentPage, SettingsPages }: props) {
+function SettingsContent({ currentPage }: props) {
 	const [previousPage, setPreviousPage] = useState<SettingsPagesType | null>(currentPage);
 	
 	const container = useRef(null)
@@ -47,13 +47,6 @@ function SettingsContent({ currentPage, SettingsPages }: props) {
 			localStorage.setItem("settings", jsonSettings)
 		}
 	}, [pageSources])
-
-	// Variable that reorganizes so the settings pages so that the current page is first
-	// * For Animation Purposes
-	const currentPages = [
-		...SettingsPages.filter((item) => !currentPage.includes(item)),
-		currentPage,
-	];
 
 	const style = css`
 		position: relative;

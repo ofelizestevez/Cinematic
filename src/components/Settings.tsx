@@ -15,19 +15,6 @@ function Settings({children} : props) {
 
 	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
 
-	const container = css`
-		/* display: none; */
-		/* opacity: 0; */
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		z-index: 1;
-		justify-content: center;
-		align-items: center;
-		backdrop-filter: blur(8px);
-	`;
-
 	const page = css`
 		position: relative;
 		height: 90%;
@@ -37,12 +24,6 @@ function Settings({children} : props) {
 		border-radius: 8px;
 		display: grid;
 		grid-template-columns: 1fr 3fr;
-	`;
-
-	const closeIcon = css`
-		position: absolute;
-		top: 16px;
-		right: 16px;
 	`;
 
 	const setSettingsPage: MouseEventHandler<HTMLButtonElement> = (e) => {

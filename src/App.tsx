@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { ThemeProvider, css, useTheme } from "@emotion/react";
-import Theme from "./utilities/Theme.ts";
+import { css, useTheme } from "@emotion/react";
 import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer.tsx";
 import Settings from "./components/Settings.tsx";
-import { CurrentThemeProvider } from "./utilities/CurrentThemeProvider";
 import { usePageSources } from "./utilities/ContentPageContext.tsx";
 import { useInitialized } from "./utilities/InitializedContext.tsx";
 import Overlay from "./components/Overlay.tsx";
@@ -20,7 +18,7 @@ function App() {
 	const { setPageSources } = usePageSources();
 	const { initialized, setInitialized } = useInitialized();
 
-	const settingsRef = useRef(null)
+	const settingsRef = useRef(null);
 
 	const closeIcon = css`
 		position: absolute;
@@ -29,28 +27,27 @@ function App() {
 	`;
 
 	const openSettings = () => {
-		setShowSettings(true)		
+		setShowSettings(true);
 	};
 
 	const closeSettings = () => {
-		gsap.to(settingsRef.current, {display: "none", opacity: 0})
-		.then(() => {
-			setShowSettings(false)
-
-		})
+		gsap.to(settingsRef.current, { display: "none", opacity: 0 }).then(() => {
+			setShowSettings(false);
+		});
 	};
-	
-	useGSAP(() => {
-		if (showSettings){
-			gsap.to(settingsRef.current, {display: "block", opacity: 1})
-		}
-	}, {dependencies: [showSettings]})
+
+	useGSAP(
+		() => {
+			if (showSettings) {
+				gsap.to(settingsRef.current, { display: "block", opacity: 1 });
+			}
+		},
+		{ dependencies: [showSettings] }
+	);
 
 	useEffect(() => {
-		console.log("YEO");
 		if (!initialized) {
 			const settingsString = localStorage.getItem("settings") ?? "";
-			console.log(settingsString);
 			try {
 				const settings = JSON.parse(settingsString ?? "");
 
@@ -70,7 +67,7 @@ function App() {
 			<Content />
 
 			{showSettings && (
-				<div style={{display: "none", opacity: 0}} ref={settingsRef}>
+				<div style={{ display: "none", opacity: 0 }} ref={settingsRef}>
 					<Overlay>
 						<Settings>
 							<div css={closeIcon}>

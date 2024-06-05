@@ -25,6 +25,7 @@ const Theme = {
 			contentBgColor: "#080808",
 			contentHeaderBgColor: "#1A1A1A",
 			contentHeaderShadow: "unset",
+			alert: "#E02929"
 		},
 		light: {
 			contentFgColor: "#000000",
@@ -35,8 +36,9 @@ const Theme = {
             0px 45px 45px 0px rgba(0, 0, 0, 0.05), 
             0px 101px 60px 0px rgba(0, 0, 0, 0.03), 
             0px 179px 72px 0px rgba(0, 0, 0, 0.01), 
-            0px 280px 78px 0px rgba(0, 0, 0, 0.00)   
+            0px 280px 78px 0px rgba(0, 0, 0, 0.00) 
             `,
+			alert: "#F25757"
 		},
 	},
 };

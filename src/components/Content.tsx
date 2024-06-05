@@ -11,10 +11,9 @@ function Content() {
 	const [content, setContent] = useState<null | ReactNode>(null);
 
 	useEffect(() => {
-
+		
 		pageSources.forEach((page) => {
 			const provider = pageToProvider(page);
-
 
 			if (provider && provider.constructor.name === Providers.WEBDAV) {
 				console.log(page.content.data)
