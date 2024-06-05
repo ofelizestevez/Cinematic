@@ -1,15 +1,14 @@
 import { css, useTheme } from "@emotion/react";
 import { MouseEventHandler } from "react";
+import { SettingsPage } from "./Settings";
 
 interface props {
-	currentPage: string;
-	SettingsPages: string[];
+	currentPage: SettingsPage;
 	setSettingsPage: MouseEventHandler<HTMLButtonElement>;
 }
 
 function SettingsSidebar({
 	currentPage,
-	SettingsPages,
 	setSettingsPage,
 }: props) {
 	const theme = useTheme();
@@ -40,7 +39,7 @@ function SettingsSidebar({
 
 	return (
 		<div css={style}>
-			{SettingsPages.map((settingsPage) => (
+			{Object.values(SettingsPage).map((settingsPage) => (
 				<button
 					css={[button, currentPage == settingsPage ? current : ""]}
 					data-page={settingsPage}

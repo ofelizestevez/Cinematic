@@ -11,19 +11,21 @@ import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const subpages = ["main", "pageSettings"];
+enum PAGE {
+	MAIN,
+	INDVPAGESETTINGS
+}
 
 function ContentSettings() {
 	const theme = useTheme();
-	const container = useRef()
+	const ref = useRef(null);
+	const initializedRef = useRef(false);
 
-	const [currentlyShowing, setCurrentlyShowing] = useState("main");
-	const { pageSources, setPageSources } = usePageSources();
+	const [currentlyShowing, setCurrentlyShowing] = useState<PAGE>(PAGE.MAIN);
 	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
 		null
 	);
-
-	const backButtonRef = useRef(null);
+	const { pageSources, setPageSources } = usePageSources();
 
 	const backIcon = css`
 		position: absolute;
@@ -31,16 +33,10 @@ function ContentSettings() {
 		left: 16px;
 	`;
 
-	const currentPages = [
-		...subpages.filter((item) => !currentlyShowing.includes(item)),
-		currentlyShowing,
-	];
-
 	const itemCss = css`
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		/* margin-bottom: 2rem; */
 		padding: 1rem;
 	`;
 
@@ -48,18 +44,26 @@ function ContentSettings() {
 		margin: 1rem 0;
 	`;
 
+	useGSAP(() => {
+		if (initializedRef.current){
+			gsap.fromTo(ref.current, {opacity: 0, duration: 0.5},{opacity: 1, duration: 0.5})
+		}
+		else {
+			initializedRef.current = true
+		}
+	}, {dependencies: [currentContentPage, currentlyShowing]})
+
 	const savePage = (page: Page) => {
 		const newPageSources = pageSources;
 		newPageSources[pageSources.indexOf(currentContentPage!)] = page;
 
 		setPageSources(newPageSources);
 		setCurrentContentPage(null);
-		setCurrentlyShowing("main");
+		setCurrentlyShowing(PAGE.MAIN);
 	};
 
 	const handleBackButton = () => {
-		setCurrentlyShowing("main");
-		setCurrentContentPage(null);
+		setCurrentlyShowing(PAGE.MAIN);
 	};
 
 	const handleAddClick = () => {
@@ -81,7 +85,6 @@ function ContentSettings() {
 			},
 		]);
 	};
-
 	const handlePageEditButton: MouseEventHandler = (e) => {
 		const target = e.target as HTMLElement;
 		const pageId = target.getAttribute("data-id") ?? 0;
@@ -89,7 +92,7 @@ function ContentSettings() {
 			pageSources.find((item) => item.id == pageId) ?? pageSources[0];
 
 		setCurrentContentPage(selectedPage);
-		setCurrentlyShowing("pageSettings");
+		setCurrentlyShowing(PAGE.INDVPAGESETTINGS);
 	};
 
 	const handlePageDeleteButton: MouseEventHandler = (e) => {
@@ -105,47 +108,45 @@ function ContentSettings() {
 		setPageSources(newPageSources);
 	};
 
-	if (currentContentPage && currentlyShowing == "pageSettings") {
-		return (
-			<ContentPageSettings
-				page={currentContentPage}
-				setCurrentContentPage={savePage}
-				key={"pageSettings-ContentSettings"}
-			/>
-		);
-	}
-
-	if (currentlyShowing == "main") {
-		return (
-			<SettingsPage
-			>
-				<h1>Content</h1>
-				<ReactSortable
-					list={pageSources}
-					setList={setPageSources}
-					css={contentCss}
+	return (
+		<div ref={ref}>
+			{currentlyShowing == PAGE.INDVPAGESETTINGS && currentContentPage &&  (
+				<ContentPageSettings
+					page={currentContentPage}
+					setCurrentContentPage={savePage}
 				>
-					{pageSources.map((source) => (
-						<div key={source.id} css={itemCss}>
-							<p>{source.title}</p>
-							<Button data-id={source.id} onClick={handlePageEditButton}>
-								Edit Page
-							</Button>
-							<Button data-id={source.id} onClick={handlePageDeleteButton}>
-								Delete Page
-							</Button>
-						</div>
-					))}
-				</ReactSortable>
+					<Button css={backIcon} onClick={handleBackButton}>
+						<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
+					</Button>
+				</ContentPageSettings>
+			)}
 
-				<Button onClick={handleAddClick}>
-					<p>Add Source</p>
-				</Button>
-			</SettingsPage>
-		);
-	}
+			{currentlyShowing == PAGE.MAIN && (
+				<SettingsPage>
+					<h1>Content</h1>
+					<ReactSortable
+						list={pageSources}
+						setList={setPageSources}
+						css={contentCss}
+					>
+						{pageSources.map((source) => (
+							<div key={source.id} css={itemCss}>
+								<p>{source.title}</p>
+								<Button data-id={source.id} onClick={handlePageEditButton}>
+									Edit Page
+								</Button>
+								<Button data-id={source.id} onClick={handlePageDeleteButton}>
+									Delete Page
+								</Button>
+							</div>
+						))}
+					</ReactSortable>
 
-	return null;
+					<Button onClick={handleAddClick}>Add Source</Button>
+				</SettingsPage>
+			)}
+		</div>
+	);
 }
 
 export default ContentSettings;

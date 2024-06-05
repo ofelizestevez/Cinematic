@@ -3,17 +3,19 @@ import { Providers } from "../../providers/_main";
 import { Page } from "../../utilities/interfaces";
 import Input from "../Input";
 import SettingsPage from "../SettingsPage";
-import { useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import SourceSettingsSection from "./SourceSettingsSection";
 
 interface props {
 	page: Page;
 	setCurrentContentPage: (page: Page) => void;
+	children: ReactNode
 }
 
 function ContentPageSettings({
 	page,
 	setCurrentContentPage,
+	children
 }: props) {
 	const [pageTitle, setPageTitle] = useState<string>(page.title);
 	const [contentSource, setContentSource] = useState<string>(page.content.source);
@@ -31,15 +33,12 @@ function ContentPageSettings({
 		page.style.saveEnabled
 	);
 
-	useEffect(() => {
-		console.log(page);
-	});
 	const style = css`
 		> * {
 			margin-bottom: 1rem;
 		}
 
-		> * > * {
+		> * > div {
 			margin-bottom: 0.25rem;
 		}
 	`;
@@ -104,6 +103,7 @@ function ContentPageSettings({
 			<Input>
 				<button onClick={handleSave}>Save</button>
 			</Input>
+			{children}
 		</SettingsPage>
 	) : null;
 }

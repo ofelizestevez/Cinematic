@@ -3,17 +3,24 @@ import { MouseEventHandler, ReactNode, useState } from "react";
 import SettingsSidebar from "./SettingsSidebar";
 import SettingsContent from "./SettingsContent";
 
+export enum SettingsPage {
+	GENERAL = "General",
+	CONTENT = "Content",
+	THEME = "Theme",
+}
 export const SettingsPages = ["general", "content", "theme"];
 
 export type SettingsPagesType = (typeof SettingsPages)[number];
 
 interface props {
-    children? : ReactNode
+	children?: ReactNode;
 }
-function Settings({children} : props) {
+function Settings({ children }: props) {
 	const theme = useTheme();
 
-	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
+	const [currentPage, setCurrentPage] = useState<SettingsPage>(
+		SettingsPage.GENERAL
+	);
 
 	const page = css`
 		position: relative;
@@ -27,22 +34,21 @@ function Settings({children} : props) {
 	`;
 
 	const setSettingsPage: MouseEventHandler<HTMLButtonElement> = (e) => {
-		setCurrentPage(
-			(e.target as HTMLButtonElement).getAttribute("data-page") ?? "content"
-		);
+		const target = e.currentTarget as HTMLButtonElement;
+		const pageAttr = target.getAttribute("data-page") as SettingsPage | null;
+	
+		if (pageAttr) {
+			setCurrentPage(pageAttr);
+		}
 	};
 
 	return (
 		<div css={page}>
 			<SettingsSidebar
 				currentPage={currentPage}
-				SettingsPages={SettingsPages}
 				setSettingsPage={setSettingsPage}
 			/>
-			<SettingsContent
-				currentPage={currentPage}
-				SettingsPages={SettingsPages}
-			/>
+			<SettingsContent currentPage={currentPage} />
 			{children}
 		</div>
 	);

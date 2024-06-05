@@ -7,16 +7,15 @@ import { css } from "@emotion/react";
 import { usePageSources } from "../utilities/ContentPageContext";
 import { useInitialized } from "../utilities/InitializedContext";
 import { useGSAP } from "@gsap/react";
-import { SettingsPagesType } from "./Settings";
+import { SettingsPage } from "./Settings";
 // import { compressToBase64, decompressFromBase64 } from 'lz-string'
 
 interface props {
-	currentPage: string;
-	SettingsPages: string[];
+	currentPage: SettingsPage;
 }
 
 function SettingsContent({ currentPage }: props) {
-	const [previousPage, setPreviousPage] = useState<SettingsPagesType | null>(currentPage);
+	const [previousPage, setPreviousPage] = useState<SettingsPage | null>(currentPage);
 	
 	const container = useRef(null)
 	const { initialized } = useInitialized();
@@ -54,9 +53,9 @@ function SettingsContent({ currentPage }: props) {
 
 	return (
 		<div ref={container} css={style}>
-			{currentPage == "general" && <GeneralSettings/>}
-			{currentPage == "content" && <ContentSettings />}
-			{currentPage == "theme" && <ThemeSettings/>}
+			{currentPage == SettingsPage.GENERAL && <GeneralSettings/>}
+			{currentPage == SettingsPage.CONTENT && <ContentSettings />}
+			{currentPage == SettingsPage.THEME && <ThemeSettings/>}
 		</div>
 	)
 }
