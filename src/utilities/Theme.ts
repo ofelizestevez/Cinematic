@@ -1,3 +1,9 @@
+export enum Theme {
+	LIGHT,
+	DARK,
+	CUSTOM,
+}
+
 export enum ThemeVariables {
 	contentFgColor = "--contentFgColor",
 	contentBgColor = "--contentBgColor",
@@ -5,13 +11,6 @@ export enum ThemeVariables {
 	contentHeaderShadow = "--contentHeaderShadow",
 	alertBgColor = "--alertBgColor",
 	alertFgColor = "--alertFgColor",
-}
-
-// uh temp name
-export enum Theme {
-	LIGHT,
-	DARK,
-	CUSTOM,
 }
 
 export interface ThemeDetails {
@@ -54,4 +53,22 @@ export const themeSizes = {
 	buttonBottom: "1rem",
 	buttonGap: "1rem",
 	contentHeaderPaddingHeight: "2rem",
+};
+
+export const themeToObject = (theme: Theme) => {
+    const themeDetails = (() => {
+        if (theme == Theme.DARK) {
+            return darkTheme;
+        }
+        return lightTheme;
+    })();
+
+    const themeVariableValues: any = {};
+    Object.keys(themeDetails).map((themeDetailsVariable) => {
+        const themeVariableName = ThemeVariables[themeDetailsVariable as keyof typeof ThemeVariables];
+
+        themeVariableValues[themeVariableName] = themeDetails[themeDetailsVariable as keyof typeof themeDetails];
+    });
+
+    return themeVariableValues;
 };

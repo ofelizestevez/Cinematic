@@ -1,4 +1,4 @@
-import { themeToObject } from "./utilities/Helpers.ts";
+import { themeToObject } from "./utilities/Theme.ts";
 import { Theme, ThemeVariables } from "./utilities/Theme.ts";
 
 // Gets Current Theme from localstorage

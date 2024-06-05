@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { useEffect } from "react";
 import { usePageSources } from "../utilities/ContentPageContext";
-import { pageToProvider } from "../utilities/Helpers";
+import { pageToProvider } from "../utilities/Provider";
 import MarkdownRenderer from "../utilities/MarkdownRenderer";
 import { ThemeVariables, themeSizes } from "../utilities/Theme";
 import { Providers } from "../providers/_main";

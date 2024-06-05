@@ -11,7 +11,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
-import { fetchUnsplash } from "../utilities/Helpers";
+import { fetchUnsplash } from "../utilities/API";
 import { Theme, themeSizes } from "../utilities/Theme";
 
 interface props {
