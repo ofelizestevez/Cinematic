@@ -11,15 +11,11 @@ import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-interface props {
-	currentlyShown: boolean;
-	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
-}
-
 const subpages = ["main", "pageSettings"];
 
-function ContentSettings({ currentlyShown, timelineRef }: props) {
+function ContentSettings() {
 	const theme = useTheme();
+	const container = useRef()
 
 	const [currentlyShowing, setCurrentlyShowing] = useState("main");
 	const { pageSources, setPageSources } = usePageSources();
@@ -29,13 +25,6 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 
 	const backButtonRef = useRef(null);
 
-	useGSAP(() => {
-		if (currentlyShowing == "main") {
-			gsap.to(backButtonRef.current, { opacity: 0 });
-		} else {
-			gsap.to(backButtonRef.current, { opacity: 1 });
-		}
-	}, [currentlyShowing]);
 	const backIcon = css`
 		position: absolute;
 		top: 16px;
@@ -116,65 +105,47 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 		setPageSources(newPageSources);
 	};
 
-	return (
-		<div>
-			{currentPages.map((page) => {
-				if (page == "main") {
-					return (
-						<SettingsPage
-							currentlyShown={currentlyShown && currentlyShowing == "main"}
-							timelineRef={timelineRef}
-							key={"main-ContentSettings"}
-						>
-							<h1>Content</h1>
-							<ReactSortable
-								list={pageSources}
-								setList={setPageSources}
-								css={contentCss}
-							>
-								{pageSources.map((source) => (
-									<div key={source.id} css={itemCss}>
-										<p>{source.title}</p>
-										<Button data-id={source.id} onClick={handlePageEditButton}>
-											Edit Page
-										</Button>
-										<Button
-											data-id={source.id}
-											onClick={handlePageDeleteButton}
-										>
-											Delete Page
-										</Button>
-									</div>
-								))}
-							</ReactSortable>
+	if (currentContentPage && currentlyShowing == "pageSettings") {
+		return (
+			<ContentPageSettings
+				page={currentContentPage}
+				setCurrentContentPage={savePage}
+				key={"pageSettings-ContentSettings"}
+			/>
+		);
+	}
 
-							<Button onClick={handleAddClick}>
-								<p>Add Source</p>
+	if (currentlyShowing == "main") {
+		return (
+			<SettingsPage
+			>
+				<h1>Content</h1>
+				<ReactSortable
+					list={pageSources}
+					setList={setPageSources}
+					css={contentCss}
+				>
+					{pageSources.map((source) => (
+						<div key={source.id} css={itemCss}>
+							<p>{source.title}</p>
+							<Button data-id={source.id} onClick={handlePageEditButton}>
+								Edit Page
 							</Button>
-						</SettingsPage>
-					);
-				} else if (page == "pageSettings" && currentContentPage) {
-					return (
-						<ContentPageSettings
-							page={currentContentPage}
-							setCurrentContentPage={savePage}
-							currentlyShown={
-								currentlyShown && currentlyShowing == "pageSettings"
-							}
-							timelineRef={timelineRef}
-							key={"pageSettings-ContentSettings"}
-						></ContentPageSettings>
-					);
-				}
-			})}
+							<Button data-id={source.id} onClick={handlePageDeleteButton}>
+								Delete Page
+							</Button>
+						</div>
+					))}
+				</ReactSortable>
 
-			<div ref={backButtonRef} css={backIcon} style={{ opacity: 0 }}>
-				<Button onClick={handleBackButton}>
-					<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
+				<Button onClick={handleAddClick}>
+					<p>Add Source</p>
 				</Button>
-			</div>
-		</div>
-	);
+			</SettingsPage>
+		);
+	}
+
+	return null;
 }
 
 export default ContentSettings;

@@ -3,10 +3,6 @@ import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
 
-interface MarkdownRendererProps {
-  markdownContent: string;
-}
-
 function MarkdownRenderer(markdownContent : string) {
   const processor = unified()
     .use(remarkParse) // Parse markdown

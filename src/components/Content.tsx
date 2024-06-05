@@ -1,33 +1,31 @@
 import { css, useTheme } from "@emotion/react";
 import { ReactNode, useEffect, useState } from "react";
 import { usePageSources } from "../utilities/ContentPageContext";
-import { Provider, Providers } from "../providers/_main";
-import { WebDav } from "../providers/WebDav";
+import { Providers } from "../providers/_main";
 import { pageToProvider } from "../utilities/Helpers";
-import axios from "axios";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkGfm from "remark-gfm";
-import remarkHtml from "remark-html";
 import MarkdownRenderer from "../utilities/MarkdownRenderer";
 
-interface props {
-	children?: ReactNode;
-}
-
-function Content({ children }: props) {
+function Content() {
 	const theme = useTheme();
-	const { pageSources } = usePageSources();
+	const { pageSources, setPageSources } = usePageSources();
 	const [content, setContent] = useState<null | ReactNode>(null);
 
 	useEffect(() => {
+
 		pageSources.forEach((page) => {
 			const provider = pageToProvider(page);
 
+
 			if (provider && provider.constructor.name === Providers.WEBDAV) {
-				provider.load().then((data) => {
-					setContent(MarkdownRenderer(data));
-				});
+				console.log(page.content.data)
+				if(!(page.content.data)){
+					provider.load().then((data) => {
+						const newPage = pageSources.find((item) => {return item.id == page.id})!
+						newPage.content.data = MarkdownRenderer(data)
+						setPageSources([...pageSources, newPage])
+					});
+				}
+
 			}
 			console.log();
 		});
@@ -42,7 +40,7 @@ function Content({ children }: props) {
 		}
 	`;
 
-	return <section css={styles}>{content !== null ? content : <></>}</section>;
+	return <section css={styles}>{content !== null ? pageSources[0].content.data : <></>}</section>;
 }
 
 export default Content;

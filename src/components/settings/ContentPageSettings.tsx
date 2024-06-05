@@ -7,15 +7,11 @@ import { useEffect, useState } from "react";
 import SourceSettingsSection from "./SourceSettingsSection";
 
 interface props {
-	currentlyShown: boolean;
-	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 	page: Page;
 	setCurrentContentPage: (page: Page) => void;
 }
 
 function ContentPageSettings({
-	currentlyShown,
-	timelineRef,
 	page,
 	setCurrentContentPage,
 }: props) {
@@ -74,8 +70,6 @@ function ContentPageSettings({
 
 	return page ? (
 		<SettingsPage
-			currentlyShown={currentlyShown}
-			timelineRef={timelineRef}
 			styles={style}
 		>
 			<Input>

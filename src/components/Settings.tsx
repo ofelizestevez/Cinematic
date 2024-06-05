@@ -1,39 +1,23 @@
 import { css, useTheme } from "@emotion/react";
-import CloseIcon from "../assets/CloseIcon";
-import Button from "./Button";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { MouseEventHandler, ReactNode, useState } from "react";
 import SettingsSidebar from "./SettingsSidebar";
 import SettingsContent from "./SettingsContent";
 
+export const SettingsPages = ["general", "content", "theme"];
+
+export type SettingsPagesType = (typeof SettingsPages)[number];
+
 interface props {
-	showSettings: boolean;
-	setShowSettings: React.Dispatch<React.SetStateAction<boolean>>;
+    children? : ReactNode
 }
-
-const SettingsPages = ["general", "content", "theme"];
-
-type SettingsPagesType = (typeof SettingsPages)[number];
-
-function Settings({ showSettings, setShowSettings }: props) {
-	const ref = useRef(null);
+function Settings({children} : props) {
 	const theme = useTheme();
 
 	const [currentPage, setCurrentPage] = useState<SettingsPagesType>("general");
 
-	// If settings are shown, then display, otherwise hide
-	useEffect(() => {
-		
-		if (showSettings) {
-			gsap.fromTo(ref.current, { opacity: 0 }, { display: "flex", opacity: 1 });
-		} else {
-			gsap.to(ref.current, { display: "none", opacity: 0 });
-		}
-	}, [showSettings]);
-
 	const container = css`
-		display: none;
-		opacity: 0;
+		/* display: none; */
+		/* opacity: 0; */
 		position: absolute;
 		width: 100%;
 		height: 100%;
@@ -61,10 +45,6 @@ function Settings({ showSettings, setShowSettings }: props) {
 		right: 16px;
 	`;
 
-	const handleCloseButton = () => {
-		setShowSettings(!showSettings);
-	};
-
 	const setSettingsPage: MouseEventHandler<HTMLButtonElement> = (e) => {
 		setCurrentPage(
 			(e.target as HTMLButtonElement).getAttribute("data-page") ?? "content"
@@ -72,23 +52,17 @@ function Settings({ showSettings, setShowSettings }: props) {
 	};
 
 	return (
-		<div css={container} ref={ref}>
-			<div css={page}>
-				<SettingsSidebar
-					currentPage={currentPage}
-					SettingsPages={SettingsPages}
-					setSettingsPage={setSettingsPage}
-				/>
-				<SettingsContent
-					currentPage={currentPage}
-					SettingsPages={SettingsPages}
-				/>
-				<div css={closeIcon}>
-					<Button onClick={handleCloseButton}>
-						<CloseIcon color={`var(${theme.names.contentFgColor})`} />
-					</Button>
-				</div>
-			</div>
+		<div css={page}>
+			<SettingsSidebar
+				currentPage={currentPage}
+				SettingsPages={SettingsPages}
+				setSettingsPage={setSettingsPage}
+			/>
+			<SettingsContent
+				currentPage={currentPage}
+				SettingsPages={SettingsPages}
+			/>
+			{children}
 		</div>
 	);
 }

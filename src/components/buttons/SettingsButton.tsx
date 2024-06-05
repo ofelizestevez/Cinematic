@@ -3,20 +3,15 @@ import SettingsIcon from "../../assets/SettingsIcon"
 import Button from "../Button"
 
 interface props {
-    showSettings: boolean
-    setShowSettings: React.Dispatch<React.SetStateAction<boolean>>
+    openSettings: () => void;
 }
 // 
-function SettingsButton ({showSettings, setShowSettings} : props) {
+function SettingsButton ({ openSettings }: props) {
     
     const theme = useTheme();
 
-    const handleClick = () => {
-        setShowSettings(!showSettings)
-    }
-
     return (
-        <Button onClick={handleClick}>
+        <Button onClick={openSettings}>
             <SettingsIcon color={`var(${theme.names.contentFgColor})`}/>
         </Button>
     )

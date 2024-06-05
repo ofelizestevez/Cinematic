@@ -6,6 +6,8 @@ import gsap from "gsap";
 import { css } from "@emotion/react";
 import { usePageSources } from "../utilities/ContentPageContext";
 import { useInitialized } from "../utilities/InitializedContext";
+import { useGSAP } from "@gsap/react";
+import { SettingsPagesType } from "./Settings";
 // import { compressToBase64, decompressFromBase64 } from 'lz-string'
 
 interface props {
@@ -14,11 +16,29 @@ interface props {
 }
 
 function SettingsContent({ currentPage, SettingsPages }: props) {
-	const timelineRef = useRef(gsap.timeline());
+	const [previousPage, setPreviousPage] = useState<SettingsPagesType | null>(currentPage);
+	
+	const container = useRef(null)
 	const { initialized } = useInitialized();
 	const { pageSources } = usePageSources();
 
+
+	useGSAP(
+		() => {
+			gsap.fromTo(container.current, {opacity: 1}, {opacity: 0})
+			setPreviousPage(currentPage)
+			console.log("FADE OUT")
+		},
+		{ dependencies: [currentPage] }
+	)
+
+	useGSAP(() => {
+		console.log("FADE IN")	
+		gsap.fromTo(container.current, {opacity: 0}, {opacity: 1})	
+	}, {dependencies: [previousPage]})
+
 	useEffect(() => {
+		// console.log("YEO")
 		if (initialized){
 			const settings = {
 				"pages": pageSources
@@ -38,37 +58,14 @@ function SettingsContent({ currentPage, SettingsPages }: props) {
 	const style = css`
 		position: relative;
 	`;
+
 	return (
-		<div css={style}>
-			{currentPages.map((settingsPage) => {
-				if (settingsPage == "content") {
-					return (
-						<ContentSettings
-							currentlyShown={currentPage == "content"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				} else if (settingsPage == "theme") {
-					return (
-						<ThemeSettings
-							currentlyShown={currentPage == "theme"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				} else if (settingsPage == "general") {
-					return (
-						<GeneralSettings
-							currentlyShown={currentPage == "general"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				}
-			})}
+		<div ref={container} css={style}>
+			{currentPage == "general" && <GeneralSettings/>}
+			{currentPage == "content" && <ContentSettings />}
+			{currentPage == "theme" && <ThemeSettings/>}
 		</div>
-	);
+	)
 }
 
 export default SettingsContent;

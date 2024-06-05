@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import { Providers } from "../providers/_main"
 
 export interface Page {
@@ -10,5 +11,6 @@ export interface Page {
 export interface Source {
     type: Providers
     source?: any
+    data? : ReactNode
     saveEnabled: boolean
 }
