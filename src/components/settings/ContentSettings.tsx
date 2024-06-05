@@ -3,7 +3,7 @@ import SettingsPage from "../SettingsPage";
 import { usePageSources } from "../../utilities/ContentPageContext";
 import Button from "../Button";
 import { css, useTheme } from "@emotion/react";
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+import { MouseEventHandler, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
 import { Providers } from "../../providers/_main";
@@ -20,23 +20,22 @@ const subpages = ["main", "pageSettings"];
 
 function ContentSettings({ currentlyShown, timelineRef }: props) {
 	const theme = useTheme();
-	
+
 	const [currentlyShowing, setCurrentlyShowing] = useState("main");
 	const { pageSources, setPageSources } = usePageSources();
 	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
 		null
 	);
 
-	const backButtonRef = useRef(null)
+	const backButtonRef = useRef(null);
 
 	useGSAP(() => {
-		if (currentlyShowing == "main"){
-			gsap.to(backButtonRef.current, {opacity: 0})
+		if (currentlyShowing == "main") {
+			gsap.to(backButtonRef.current, { opacity: 0 });
+		} else {
+			gsap.to(backButtonRef.current, { opacity: 1 });
 		}
-		else {
-			gsap.to(backButtonRef.current, {opacity: 1})
-		}
-	}, [currentlyShowing])
+	}, [currentlyShowing]);
 	const backIcon = css`
 		position: absolute;
 		top: 16px;
@@ -73,7 +72,7 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 		setCurrentlyShowing("main");
 		setCurrentContentPage(null);
 	};
-	
+
 	const handleAddClick = () => {
 		setPageSources([
 			...pageSources,
@@ -104,6 +103,19 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 		setCurrentlyShowing("pageSettings");
 	};
 
+	const handlePageDeleteButton: MouseEventHandler = (e) => {
+		const target = e.target as HTMLElement;
+		const pageId = target.getAttribute("data-id") ?? 0;
+		const selectedPage =
+			pageSources.find((item) => item.id == pageId) ?? pageSources[0];
+
+		const newPageSources = pageSources.filter((item) => {
+			return item != selectedPage;
+		});
+
+		setPageSources(newPageSources);
+	};
+
 	return (
 		<div>
 			{currentPages.map((page) => {
@@ -126,6 +138,12 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 										<Button data-id={source.id} onClick={handlePageEditButton}>
 											Edit Page
 										</Button>
+										<Button
+											data-id={source.id}
+											onClick={handlePageDeleteButton}
+										>
+											Delete Page
+										</Button>
 									</div>
 								))}
 							</ReactSortable>
@@ -143,7 +161,6 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 							currentlyShown={
 								currentlyShown && currentlyShowing == "pageSettings"
 							}
-							setCurrentlyShowing={setCurrentlyShowing}
 							timelineRef={timelineRef}
 							key={"pageSettings-ContentSettings"}
 						></ContentPageSettings>
@@ -151,7 +168,7 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 				}
 			})}
 
-			<div ref={backButtonRef} css={backIcon} style={{opacity: 0}}>
+			<div ref={backButtonRef} css={backIcon} style={{ opacity: 0 }}>
 				<Button onClick={handleBackButton}>
 					<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
 				</Button>

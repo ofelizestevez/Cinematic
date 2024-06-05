@@ -1,10 +1,8 @@
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { Providers } from "../../providers/_main";
 import { Page } from "../../utilities/interfaces";
 import Input from "../Input";
 import SettingsPage from "../SettingsPage";
-import Button from "../Button";
-import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import { useEffect, useState } from "react";
 import SourceSettingsSection from "./SourceSettingsSection";
 
@@ -13,27 +11,23 @@ interface props {
 	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 	page: Page;
 	setCurrentContentPage: (page: Page) => void;
-	setCurrentlyShowing: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function ContentPageSettings({
 	currentlyShown,
 	timelineRef,
-	setCurrentlyShowing,
 	page,
 	setCurrentContentPage,
 }: props) {
-	const theme = useTheme();
-
 	const [pageTitle, setPageTitle] = useState<string>(page.title);
-	const [contentSource, setContentSource] = useState<string>("");
+	const [contentSource, setContentSource] = useState<string>(page.content.source);
 	const [contentTypeOption, setContentTypeOption] = useState<string>(
 		page.content.type
 	);
 	const [saveContentEnabled, setContentSavedEnabled] = useState(
 		page.content.saveEnabled
 	);
-	const [styleSource, setStyleSource] = useState<string>("");
+	const [styleSource, setStyleSource] = useState<string>(page.style.source);
 	const [styleTypeOption, setStyleTypeOption] = useState<string>(
 		page.style.type
 	);
@@ -54,15 +48,6 @@ function ContentPageSettings({
 		}
 	`;
 
-	const closeIcon = css`
-		position: absolute;
-		top: 16px;
-		left: 16px;
-	`;
-
-	const handleBackButton = () => {
-		setCurrentlyShowing("main");
-	};
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setPageTitle(event.target.value);

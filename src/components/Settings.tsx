@@ -23,6 +23,7 @@ function Settings({ showSettings, setShowSettings }: props) {
 
 	// If settings are shown, then display, otherwise hide
 	useEffect(() => {
+		
 		if (showSettings) {
 			gsap.fromTo(ref.current, { opacity: 0 }, { display: "flex", opacity: 1 });
 		} else {

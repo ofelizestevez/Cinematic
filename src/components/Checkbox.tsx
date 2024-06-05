@@ -1,4 +1,3 @@
-import { useState } from "react"
 import SquareIconChecked from "../assets/SquareIconChecked"
 import SquareIcon from "../assets/SquareIcon"
 import { useTheme } from "@emotion/react"
