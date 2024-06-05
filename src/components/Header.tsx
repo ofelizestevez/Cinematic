@@ -12,11 +12,11 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
 import { fetchUnsplash } from "../utilities/Helpers";
-import { ThemeNames, themeSizes } from "../utilities/Theme";
+import { Theme, themeSizes } from "../utilities/Theme";
 
 interface props {
 	children?: ReactNode;
-	setTheme: React.Dispatch<React.SetStateAction<ThemeNames>>;
+	setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
 // Image CSS Styles
@@ -95,7 +95,7 @@ function Header({ children, setTheme  }: props) {
 			// Takes the color, turns it into a Colord to use .isDark()
 			const colord = new Colord(color.hex);
 			console.log(colord.isDark())
-			setTheme(colord.isDark() ? ThemeNames.DARK : ThemeNames.LIGHT);
+			setTheme(colord.isDark() ? Theme.DARK : Theme.LIGHT);
 		});
 	};
 

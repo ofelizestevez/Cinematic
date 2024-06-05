@@ -2,11 +2,11 @@ import axios from "axios";
 import { Page } from "./interfaces";
 import { Providers } from "../providers/_main";
 import { WebDav } from "../providers/WebDav";
-import { ThemeNames, ThemeVariables, darkTheme, lightTheme } from "./Theme";
+import { Theme, ThemeVariables, darkTheme, lightTheme } from "./Theme";
 
-export const themeToObject = (theme : ThemeNames) => {
+export const themeToObject = (theme : Theme) => {
     const themeDetails = (() => {
-        if (theme == ThemeNames.DARK){
+        if (theme == Theme.DARK){
             return darkTheme
         }
         return lightTheme

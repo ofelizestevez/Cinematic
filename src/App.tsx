@@ -1,63 +1,30 @@
-import { useEffect, useRef, useState } from "react";
-import { css } from "@emotion/react";
+import { useEffect } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer.tsx";
-import Settings from "./components/Settings.tsx";
+import SettingsOverlay from "./components/SettingsOverlay.tsx";
 import { usePageSources } from "./utilities/ContentPageContext.tsx";
 import { useInitialized } from "./utilities/InitializedContext.tsx";
-import Overlay from "./components/Overlay.tsx";
-import CloseIcon from "./assets/CloseIcon.tsx";
-import Button from "./components/Button.tsx";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ThemeNames, ThemeVariables } from "./utilities/Theme.ts";
+import { Theme } from "./utilities/Theme.ts";
 import { themeToObject } from "./utilities/Helpers.ts";
-
-const closeIcon = css`
-	position: absolute;
-	top: 16px;
-	right: 16px;
-`;
+import { useTheme } from "./hooks/useTheme.ts";
+import { useSettings } from "./hooks/useSettings.ts";
 
 function App() {
-	const [showSettings, setShowSettings] = useState(false);
 	const { setPageSources } = usePageSources();
 	const { initialized, setInitialized } = useInitialized();
-	const [theme, setTheme] = useState<ThemeNames>(localStorage.getItem("currentTheme") as  ThemeNames | null ?? ThemeNames.LIGHT)
+	const [theme, setTheme] = useTheme(Theme.LIGHT);
+	const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
 
 	useGSAP(() => {
-		localStorage.setItem("currentTheme", JSON.stringify(theme))
-
-		if (initialized){
-			const themeVariableValues = (themeToObject(theme))
-			gsap.to(":root", themeVariableValues)
+		if (initialized) {
+			const themeVariableValues = themeToObject(theme);
+			gsap.to(":root", themeVariableValues);
 		}
-
-		console.log(theme)
-		// gsap.to(":root", {})
-	}, [theme])
-	
-	const settingsRef = useRef(null);
-
-	const openSettings = () => {
-		setShowSettings(true);
-	};
-
-	const closeSettings = () => {
-		gsap.to(settingsRef.current, { display: "none", opacity: 0 }).then(() => {
-			setShowSettings(false);
-		});
-	};
-
-	useGSAP(
-		() => {
-			if (showSettings) {
-				gsap.to(settingsRef.current, { display: "block", opacity: 1 });
-			}
-		},
-		{ dependencies: [showSettings] }
-	);
+	}, [theme]);
 
 	useEffect(() => {
 		if (!initialized) {
@@ -69,35 +36,22 @@ function App() {
 					const pageSources = settings.pages;
 					setPageSources(pageSources);
 				}
-			} catch (error) {}
+			} catch (error) {
+				console.error("Failed to parse settings:", error);
+			}
 
 			setInitialized(true);
 		}
-	});
+	}, [initialized, setInitialized, setPageSources]);
 
 	return (
 		<>
-			<Header setTheme={setTheme}/>
+			<Header setTheme={setTheme} />
 			<Content />
-
-			{showSettings && (
-				<div style={{ display: "none", opacity: 0 }} ref={settingsRef}>
-					<Overlay>
-						<Settings>
-							<div css={closeIcon}>
-								<Button onClick={closeSettings}>
-									<CloseIcon color={`var(${ThemeVariables.contentFgColor})`} />
-								</Button>
-							</div>
-						</Settings>
-					</Overlay>
-				</div>
-			)}
-
+			{showSettings && <SettingsOverlay closeSettings={closeSettings} settingsRef={settingsRef} />}
 			<Footer openSettings={openSettings} />
 		</>
 	);
 }
 
 export default App;
-

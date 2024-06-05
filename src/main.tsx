@@ -3,10 +3,15 @@ import App from "./App.tsx";
 import { ContentPageProvider } from "./utilities/ContentPageContext.tsx";
 import { InitializedProvider } from "./utilities/InitializedContext.tsx";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-	<InitializedProvider>
-		<ContentPageProvider>
-			<App />
-		</ContentPageProvider>
-	</InitializedProvider>
-);
+const rootElement = document.getElementById("root");
+if (rootElement) {
+	ReactDOM.createRoot(rootElement).render(
+		<InitializedProvider>
+			<ContentPageProvider>
+				<App />
+			</ContentPageProvider>
+		</InitializedProvider>
+	);
+} else {
+	console.error("Root element not found");
+}
