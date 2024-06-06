@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { Providers } from "../providers/_main"
+import { Providers } from "./providers/_main"
 
 export interface Page {
     id: number,

@@ -4,7 +4,7 @@ import { usePageSources } from "../utilities/ContentPageContext";
 import { pageToProvider } from "../utilities/Provider";
 import MarkdownRenderer from "../utilities/MarkdownRenderer";
 import { ThemeVariables, themeSizes } from "../utilities/Theme";
-import { Providers } from "../providers/_main";
+import { Providers } from "../utilities/providers/_main";
 
 const styles = css`
 	width: 100%;

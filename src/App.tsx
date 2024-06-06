@@ -1,3 +1,4 @@
+// * Imports
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -13,11 +14,14 @@ import { useTheme } from "./hooks/useTheme.ts";
 import { useSettings } from "./hooks/useSettings.ts";
 import { useLoadSettings } from "./hooks/useLoadSettings.ts";
 
+// * Component
 function App() {
+	// * Contexts and Hooks
 	const { initialized } = useInitialized();
 	const [theme, setTheme] = useTheme(Theme.LIGHT);
 	const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
 
+	// * Animates Theme
 	useGSAP(() => {
 		if (initialized) {
 			const themeVariableValues = themeToObject(theme);
@@ -25,6 +29,7 @@ function App() {
 		}
 	}, [theme]);
 
+	// * Loads Settings Hook
 	useLoadSettings()
 
 	return (

@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 import { MouseEventHandler, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
-import { Providers } from "../../providers/_main";
+import { Providers } from "../../utilities/providers/_main";
 import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";

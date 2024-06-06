@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Providers } from "../../providers/_main";
+import { Providers } from "../../utilities/providers/_main";
 import { Page } from "../../utilities/interfaces";
 import Input from "../Input";
 import SettingsPage from "../SettingsPage";
