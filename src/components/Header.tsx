@@ -13,6 +13,7 @@ import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
 import { fetchUnsplash } from "../utilities/API";
 import { Theme, themeSizes } from "../utilities/Theme";
+import { LocalStorageKeys } from "../utilities/LocalStorage";
 
 interface props {
 	children?: ReactNode;
@@ -83,7 +84,7 @@ function Header({ children, setTheme  }: props) {
 		// fetch image from unsplash then set the url to background image + localstorage
 		fetchUnsplash().then((url) => {
 			setBackgroundImage(url);
-			localStorage.setItem("backgroundImage", url);
+			localStorage.setItem(LocalStorageKeys.backgroundImage, url);
 		});
 	};
 
@@ -121,7 +122,7 @@ function Header({ children, setTheme  }: props) {
 		// Animates new scroll position then saves it.
 		gsap.to(ref.current, { scrollTo: headerHalfScrollPoint });
 		localStorage.setItem(
-			SCROLL_HEIGHT_ITEM,
+			LocalStorageKeys.scrollHeight,
 			JSON.stringify(headerHalfScrollPoint)
 		);
 	};
@@ -180,7 +181,7 @@ function Header({ children, setTheme  }: props) {
 		if (isScrollable) {
 			gsap.to(ref.current, { opacity: 1 });
 			localStorage.setItem(
-				SCROLL_HEIGHT_ITEM,
+				LocalStorageKeys.scrollHeight,
 				JSON.stringify(ref.current?.scrollTop)
 			);
 		}

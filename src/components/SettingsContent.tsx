@@ -7,6 +7,7 @@ import { css } from "@emotion/react";
 import { usePageSources } from "../utilities/ContentPageContext";
 import { useGSAP } from "@gsap/react";
 import { SettingsPage } from "./Settings";
+import { LocalStorageKeys } from "../utilities/LocalStorage";
 // import { compressToBase64, decompressFromBase64 } from 'lz-string'
 
 interface props {
@@ -46,7 +47,7 @@ function SettingsContent({ currentPage }: props) {
 			pages: pageSources,
 		};
 		const jsonSettings = JSON.stringify(settings);
-		localStorage.setItem("settings", jsonSettings);
+		localStorage.setItem(LocalStorageKeys.settings, jsonSettings);
 	}, [pageSources]);
 
 	return (
