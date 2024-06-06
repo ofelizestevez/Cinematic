@@ -10,15 +10,20 @@ import SettingsOverlay from "./components/SettingsOverlay.tsx";
 
 import { Theme, themeToObject } from "./utilities/Theme.ts";
 
-import { useTheme } from "./hooks/useTheme.ts";
 import { useSettings } from "./hooks/useSettings.ts";
 import { useLoadSettings } from "./hooks/useLoadSettings.ts";
+import { LocalStorageKeys } from "./utilities/LocalStorage.ts";
 
 // * Component
 function App() {
-    // * Contexts and Hooks
+    // * States
 	const [initialized, setInitialized] = useState(false)
-    const [theme, setTheme] = useTheme(Theme.LIGHT);
+    const [theme, setTheme] = useState<Theme>(() => {
+		const savedTheme = localStorage.getItem(LocalStorageKeys.currentTheme);
+		return savedTheme ? (JSON.parse(savedTheme) as Theme) : Theme.LIGHT;
+	});
+
+    // * Hooks
     const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
     const loadSettings = useLoadSettings();
 
@@ -28,7 +33,7 @@ function App() {
 		gsap.to(":root", themeVariableValues);
     }, [theme]);
 
-    // * Loads Settings Hook
+    // * App initialization
     useEffect(() => {
 		if (!initialized) {
             loadSettings();
