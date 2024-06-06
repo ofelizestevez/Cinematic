@@ -12,9 +12,9 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ThemeVariables } from "../../utilities/Theme";
 
-enum PAGE {
-	MAIN,
-	INDVPAGESETTINGS,
+enum ComponentPage {
+	Main,
+	IndvPageSettings,
 }
 
 const backIcon = css`
@@ -38,7 +38,7 @@ function ContentSettings() {
 	const ref = useRef(null);
 	const initializedRef = useRef(false);
 
-	const [currentlyShowing, setCurrentlyShowing] = useState<PAGE>(PAGE.MAIN);
+	const [currentlyShowing, setCurrentlyShowing] = useState<ComponentPage>(ComponentPage.Main);
 	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
 		null
 	);
@@ -65,11 +65,11 @@ function ContentSettings() {
 
 		setPageSources(newPageSources);
 		setCurrentContentPage(null);
-		setCurrentlyShowing(PAGE.MAIN);
+		setCurrentlyShowing(ComponentPage.Main);
 	};
 
 	const handleBackButton = () => {
-		setCurrentlyShowing(PAGE.MAIN);
+		setCurrentlyShowing(ComponentPage.Main);
 	};
 
 	const handleAddClick = () => {
@@ -98,7 +98,7 @@ function ContentSettings() {
 			pageSources.find((item) => item.id == pageId) ?? pageSources[0];
 
 		setCurrentContentPage(selectedPage);
-		setCurrentlyShowing(PAGE.INDVPAGESETTINGS);
+		setCurrentlyShowing(ComponentPage.IndvPageSettings);
 	};
 
 	const handlePageDeleteButton: MouseEventHandler = (e) => {
@@ -116,7 +116,7 @@ function ContentSettings() {
 
 	return (
 		<div ref={ref}>
-			{currentlyShowing == PAGE.INDVPAGESETTINGS && currentContentPage && (
+			{currentlyShowing == ComponentPage.IndvPageSettings && currentContentPage && (
 				<ContentPageSettings
 					page={currentContentPage}
 					setCurrentContentPage={savePage}
@@ -127,7 +127,7 @@ function ContentSettings() {
 				</ContentPageSettings>
 			)}
 
-			{currentlyShowing == PAGE.MAIN && (
+			{currentlyShowing == ComponentPage.Main && (
 				<SettingsPage>
 					<h1>Content</h1>
 					<ReactSortable
