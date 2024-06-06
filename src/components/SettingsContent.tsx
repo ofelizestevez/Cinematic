@@ -5,7 +5,6 @@ import ThemeSettings from "./settings/ThemeSettings";
 import gsap from "gsap";
 import { css } from "@emotion/react";
 import { usePageSources } from "../utilities/ContentPageContext";
-import { useInitialized } from "../utilities/InitializedContext";
 import { useGSAP } from "@gsap/react";
 import { SettingsPage } from "./Settings";
 // import { compressToBase64, decompressFromBase64 } from 'lz-string'
@@ -24,7 +23,6 @@ function SettingsContent({ currentPage }: props) {
 	);
 
 	const container = useRef(null);
-	const { initialized } = useInitialized();
 	const { pageSources } = usePageSources();
 
 	useGSAP(
@@ -43,13 +41,12 @@ function SettingsContent({ currentPage }: props) {
 	);
 
 	useEffect(() => {
-		if (initialized) {
-			const settings = {
-				pages: pageSources,
-			};
-			const jsonSettings = JSON.stringify(settings);
-			localStorage.setItem("settings", jsonSettings);
-		}
+		console.log("WEEEEEEE")
+		const settings = {
+			pages: pageSources,
+		};
+		const jsonSettings = JSON.stringify(settings);
+		localStorage.setItem("settings", jsonSettings);
 	}, [pageSources]);
 
 	return (
