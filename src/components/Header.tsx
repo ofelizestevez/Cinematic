@@ -1,4 +1,3 @@
-import gsap from "gsap";
 import React, {
 	MouseEventHandler,
 	ReactNode,
@@ -6,14 +5,18 @@ import React, {
 	useRef,
 	useState,
 } from "react";
-import { Theme, themeSizes } from "../utilities/Theme";
-import { css } from "@emotion/react";
+import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useBackgroundImage } from "../hooks/useBackgroundImage";
 import { useGSAP } from "@gsap/react";
-import { LocalStorageKeys } from "../utilities/LocalStorage";
-import { FastAverageColor } from "fast-average-color";
+import { css } from "@emotion/react";
 import { Colord } from "colord";
+import { FastAverageColor } from "fast-average-color";
+
+import { Theme, themeSizes } from "../utilities/Theme";
+import { useBackgroundImage } from "../hooks/useBackgroundImage";
+import { LocalStorageKeys } from "../utilities/LocalStorage";
+import { beatingAnimation, crossFade, fadeIn, scrollableAnimation } from "../utilities/HeaderAnimations";
+
 gsap.registerPlugin(ScrollToPlugin);
 
 interface props {
@@ -21,6 +24,7 @@ interface props {
 	setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
+// * Constant CSS
 const image = css`
 	position: absolute;
 	width: 100%;
@@ -28,18 +32,20 @@ const image = css`
 `;
 
 function Header({ children, setTheme }: props) {
+	// * States
 	const { backgroundImage, changeImage } = useBackgroundImage();
 	const [backupImage, setBackupImage] = useState<string | null>("");
 	const [scrollable, setScrollable] = useState(false);
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const [crossfadeTrigger, setCrossfadeTrigger] = useState({});
 
+	// * Refs
 	const ref = useRef<HTMLElement>(null);
 	const imageRef = useRef<HTMLImageElement>(null);
 	const backupImageRef = useRef<HTMLImageElement>(null);
 	const timeline = useRef(gsap.timeline());
 	
-    // Header CSS Styles
+    // * Dynamic CSS
 	const styles = css`
 		position: relative;
 		overflow: ${scrollable ? "scroll" : "hidden"};
@@ -53,54 +59,44 @@ function Header({ children, setTheme }: props) {
 		}
 	`;
 
-	// Change Image if there is no background image
+	// * Change Image if there is no background image
 	useEffect(() => {
 		if (!backgroundImage) {
 			changeImage();
 		}
 	}, [backgroundImage]);
 
+	// * Animations based of backgroundImage and backupImage
 	useGSAP(() => {
 		if (!imageLoaded) {
 			if (backgroundImage && !backupImage) {
-				gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1 });
+				fadeIn(ref.current)
 			}
 		} else {
 			if (backupImage) {
-				if (backgroundImage == backupImage) {
-					timeline.current
-						.clear()
-						.repeat(-1)
-						.fromTo(ref.current, { opacity: 1 }, { opacity: 0.5, duration: 1 })
-						.to(ref.current, { opacity: 1, duration: 1 });
-				} else if (backgroundImage != backupImage) {
-					timeline.current.repeat(0).to(ref.current, { opacity: 1 });
-				}
+				beatingAnimation(timeline.current, ref.current, backgroundImage, backupImage)
 			}
 		}
 	}, [backgroundImage, backupImage]);
 
+	// * Animations made off crossfade Trigger
 	useGSAP(() => {
         if (imageLoaded) {
-            console.log("YEO")
-			gsap
-				.fromTo(backupImageRef.current, { opacity: 1 }, { opacity: 0 })
+			crossFade(backupImageRef.current)
 				.then(() => {
 					setBackupImage(null)
 				});
 		}
 	}, [crossfadeTrigger]);
 
+	// * Animations based off Scrollable
 	useGSAP(() => {
 		if (imageLoaded) {
-			if (scrollable) {
-				gsap.to(ref.current, { opacity: 0.5 });
-			} else {
-				gsap.to(ref.current, { opacity: 1 });
-			}
+			scrollableAnimation(ref.current, scrollable)
 		}
 	}, [scrollable]);
 
+	// * Event Handlers
 	const onImageClick = () => {
 		setBackupImage(backgroundImage ?? "");
 		changeImage();
@@ -133,6 +129,7 @@ function Header({ children, setTheme }: props) {
 		setScrollable(!scrollable);
 	};
 
+	// * Helpers
     const setInitialScrollPosition = () => {
 		// Sets scroll height to localstorage or defaults to halways point
 		let scrollHeight = localStorage.getItem(LocalStorageKeys.scrollHeight);
