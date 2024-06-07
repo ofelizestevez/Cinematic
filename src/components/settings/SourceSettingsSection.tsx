@@ -1,6 +1,6 @@
-import Checkbox from "../Checkbox";
-import Dropdown from "../Dropdown";
-import Input from "../Input";
+import Checkbox from "../simple/Checkbox";
+import Dropdown from "../simple/Dropdown";
+import Input from "../simple/Input";
 
 interface props {
 	title: string;

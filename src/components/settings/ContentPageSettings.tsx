@@ -1,26 +1,33 @@
 import { css } from "@emotion/react";
-import { Providers } from "../../providers/_main";
+import { Providers } from "../../utilities/providers/_main";
 import { Page } from "../../utilities/interfaces";
-import Input from "../Input";
+
 import SettingsPage from "../SettingsPage";
-import { useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import SourceSettingsSection from "./SourceSettingsSection";
+import Input from "../simple/Input";
 
 interface props {
-	currentlyShown: boolean;
-	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
 	page: Page;
 	setCurrentContentPage: (page: Page) => void;
+	children: ReactNode;
 }
 
-function ContentPageSettings({
-	currentlyShown,
-	timelineRef,
-	page,
-	setCurrentContentPage,
-}: props) {
+const style = css`
+	> * {
+		margin-bottom: 1rem;
+	}
+
+	> * > div {
+		margin-bottom: 0.25rem;
+	}
+`;
+
+function ContentPageSettings({ page, setCurrentContentPage, children }: props) {
 	const [pageTitle, setPageTitle] = useState<string>(page.title);
-	const [contentSource, setContentSource] = useState<string>(page.content.source);
+	const [contentSource, setContentSource] = useState<string>(
+		page.content.source
+	);
 	const [contentTypeOption, setContentTypeOption] = useState<string>(
 		page.content.type
 	);
@@ -34,20 +41,6 @@ function ContentPageSettings({
 	const [saveStyleEnabled, setStyleSavedEnabled] = useState(
 		page.style.saveEnabled
 	);
-
-	useEffect(() => {
-		console.log(page);
-	});
-	const style = css`
-		> * {
-			margin-bottom: 1rem;
-		}
-
-		> * > * {
-			margin-bottom: 0.25rem;
-		}
-	`;
-
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setPageTitle(event.target.value);
@@ -73,11 +66,7 @@ function ContentPageSettings({
 	};
 
 	return page ? (
-		<SettingsPage
-			currentlyShown={currentlyShown}
-			timelineRef={timelineRef}
-			styles={style}
-		>
+		<SettingsPage styles={style}>
 			<Input>
 				<button onClick={handleSave}>Save</button>
 			</Input>
@@ -110,6 +99,7 @@ function ContentPageSettings({
 			<Input>
 				<button onClick={handleSave}>Save</button>
 			</Input>
+			{children}
 		</SettingsPage>
 	) : null;
 }

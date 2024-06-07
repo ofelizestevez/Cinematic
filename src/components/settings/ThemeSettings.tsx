@@ -1,13 +1,8 @@
 import SettingsPage from "../SettingsPage";
 
-interface props {
-	currentlyShown: boolean;
-	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
-}
-
-function ThemeSettings({ currentlyShown, timelineRef }: props) {
+function ThemeSettings() {
 	return (
-		<SettingsPage currentlyShown={currentlyShown} timelineRef={timelineRef}>
+		<SettingsPage>
 			<h1>Theme</h1>
 			{/* 
                 Radio ("Dark/Light based off image")

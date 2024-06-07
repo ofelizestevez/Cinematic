@@ -1,50 +1,57 @@
+// * Imports
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "@emotion/react";
-import Theme from "./utilities/Theme.ts";
-import Header from "./components/Header";
+import {gsap} from "gsap";
+import { useGSAP } from "@gsap/react";
+
+
 import Content from "./components/Content";
 import Footer from "./components/Footer.tsx";
-import Settings from "./components/Settings.tsx";
-import { CurrentThemeProvider } from "./utilities/CurrentThemeProvider";
-import { usePageSources } from "./utilities/ContentPageContext.tsx";
-import { useInitialized } from "./utilities/InitializedContext.tsx";
+import SettingsOverlay from "./components/SettingsOverlay.tsx";
 
+import { Theme, themeToObject } from "./utilities/Theme.ts";
+
+import { useSettings } from "./hooks/useSettings.ts";
+import { useLoadSettings } from "./hooks/useLoadSettings.ts";
+import { LocalStorageKeys } from "./utilities/LocalStorage.ts";
+import Header from "./components/Header.tsx";
+import useFetchPageData from "./hooks/useFetchPageData.tsx";
+
+// * Component
 function App() {
-	const [showSettings, setShowSettings] = useState(false);
-	const { setPageSources } = usePageSources();
-	const { initialized, setInitialized } = useInitialized();
-
-	useEffect(() => {
-		if (!initialized) {
-			const settingsString = localStorage.getItem("settings") ?? "";
-			console.log(settingsString);
-			try {
-				const settings = JSON.parse(settingsString ?? "");
-
-				if (settings.pages) {
-					const pageSources = settings.pages;
-					setPageSources(pageSources);
-				}
-			} catch (error) {}
-
-			setInitialized(true);
-		}
+    // * States
+	const [initialized, setInitialized] = useState(false)
+    const [theme, setTheme] = useState<Theme>(() => {
+		const savedTheme = localStorage.getItem(LocalStorageKeys.currentTheme);
+		return savedTheme ? (JSON.parse(savedTheme) as Theme) : Theme.LIGHT;
 	});
 
-	return (
-		<CurrentThemeProvider>
-			<ThemeProvider theme={Theme}>
-				<Header />
-				<Content />
+    // * Hooks
+    const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
+    const loadSettings = useLoadSettings();
+    useFetchPageData(); // Use the custom hook to fetch page data
+    
+    // * Animates Theme
+    useGSAP(() => {
+		const themeVariableValues = themeToObject(theme);
+		gsap.to(":root", themeVariableValues);
+    }, [theme]);
 
-				<Settings
-					showSettings={showSettings}
-					setShowSettings={setShowSettings}
-				/>
-				<Footer showSettings={showSettings} setShowSettings={setShowSettings} />
-			</ThemeProvider>
-		</CurrentThemeProvider>
-	);
+    // * App initialization
+    useEffect(() => {
+		if (!initialized) {
+            loadSettings();
+            setInitialized(true);
+        }
+    }, [initialized, loadSettings]);
+
+    return (
+        <>
+            <Header setTheme={setTheme} />
+            <Content />
+            {showSettings && <SettingsOverlay closeSettings={closeSettings} settingsRef={settingsRef} />}
+            <Footer openSettings={openSettings} />
+        </>
+    );
 }
 
 export default App;

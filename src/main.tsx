@@ -1,12 +1,17 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { ContentPageProvider } from "./utilities/ContentPageContext.tsx";
-import { InitializedProvider } from "./utilities/InitializedContext.tsx";
+import { ContentPageProvider } from "./hooks/ContentPageContext.tsx";
+import { PageDataProvider } from "./hooks/ContentPageDataContext.tsx";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-	<InitializedProvider>
+const rootElement = document.getElementById("root");
+if (rootElement) {
+	ReactDOM.createRoot(rootElement).render(
 		<ContentPageProvider>
-			<App />
+			<PageDataProvider>
+				<App />
+			</PageDataProvider>
 		</ContentPageProvider>
-	</InitializedProvider>
-);
+	);
+} else {
+	console.error("Root element not found");
+}

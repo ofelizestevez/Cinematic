@@ -1,4 +1,5 @@
-import { Providers } from "../providers/_main"
+import { ReactNode } from "react"
+import { Providers } from "./providers/_main"
 
 export interface Page {
     id: number,
@@ -11,4 +12,11 @@ export interface Source {
     type: Providers
     source?: any
     saveEnabled: boolean
+}
+
+export interface PageData {
+    id: number,
+    title: string,
+    style: string,
+    content: string
 }

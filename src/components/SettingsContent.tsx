@@ -2,71 +2,59 @@ import { useEffect, useRef, useState } from "react";
 import ContentSettings from "./settings/ContentSettings";
 import GeneralSettings from "./settings/GeneralSettings";
 import ThemeSettings from "./settings/ThemeSettings";
-import gsap from "gsap";
+import {gsap} from "gsap";
 import { css } from "@emotion/react";
-import { usePageSources } from "../utilities/ContentPageContext";
-import { useInitialized } from "../utilities/InitializedContext";
+import { usePageSources } from "../hooks/ContentPageContext";
+import { useGSAP } from "@gsap/react";
+import { SettingsPage } from "./Settings";
+import { LocalStorageKeys } from "../utilities/LocalStorage";
 // import { compressToBase64, decompressFromBase64 } from 'lz-string'
 
 interface props {
-	currentPage: string;
-	SettingsPages: string[];
+	currentPage: SettingsPage;
 }
 
-function SettingsContent({ currentPage, SettingsPages }: props) {
-	const timelineRef = useRef(gsap.timeline());
-	const { initialized } = useInitialized();
+const style = css`
+	position: relative;
+`;
+
+function SettingsContent({ currentPage }: props) {
+	const [previousPage, setPreviousPage] = useState<SettingsPage | null>(
+		currentPage
+	);
+
+	const container = useRef(null);
 	const { pageSources } = usePageSources();
 
+	useGSAP(
+		() => {
+			gsap.fromTo(container.current, { opacity: 1 }, { opacity: 0 });
+			setPreviousPage(currentPage);
+		},
+		{ dependencies: [currentPage] }
+	);
+
+	useGSAP(
+		() => {
+			gsap.fromTo(container.current, { opacity: 0 }, { opacity: 1 });
+		},
+		{ dependencies: [previousPage] }
+	);
+
 	useEffect(() => {
-		if (initialized){
-			const settings = {
-				"pages": pageSources
-			}
-			const jsonSettings = JSON.stringify(settings)
-			localStorage.setItem("settings", jsonSettings)
-		}
-	}, [pageSources])
+		console.log(pageSources)
+		const settings = {
+			pages: pageSources,
+		};
+		const jsonSettings = JSON.stringify(settings);
+		localStorage.setItem(LocalStorageKeys.settings, jsonSettings);
+	}, [pageSources]);
 
-	// Variable that reorganizes so the settings pages so that the current page is first
-	// * For Animation Purposes
-	const currentPages = [
-		...SettingsPages.filter((item) => !currentPage.includes(item)),
-		currentPage,
-	];
-
-	const style = css`
-		position: relative;
-	`;
 	return (
-		<div css={style}>
-			{currentPages.map((settingsPage) => {
-				if (settingsPage == "content") {
-					return (
-						<ContentSettings
-							currentlyShown={currentPage == "content"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				} else if (settingsPage == "theme") {
-					return (
-						<ThemeSettings
-							currentlyShown={currentPage == "theme"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				} else if (settingsPage == "general") {
-					return (
-						<GeneralSettings
-							currentlyShown={currentPage == "general"}
-							timelineRef={timelineRef}
-							key={settingsPage}
-						/>
-					);
-				}
-			})}
+		<div ref={container} css={style}>
+			{currentPage == SettingsPage.GENERAL && <GeneralSettings />}
+			{currentPage == SettingsPage.CONTENT && <ContentSettings />}
+			{currentPage == SettingsPage.THEME && <ThemeSettings />}
 		</div>
 	);
 }

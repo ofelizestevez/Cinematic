@@ -1,63 +1,67 @@
 import { ReactSortable } from "react-sortablejs";
 import SettingsPage from "../SettingsPage";
-import { usePageSources } from "../../utilities/ContentPageContext";
-import Button from "../Button";
-import { css, useTheme } from "@emotion/react";
-import { MouseEventHandler, useRef, useState } from "react";
+import { usePageSources } from "../../hooks/ContentPageContext";
+import Button from "../simple/Button";
+import { css } from "@emotion/react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
-import { Providers } from "../../providers/_main";
+import { Providers } from "../../utilities/providers/_main";
 import LeftArrowIcon from "../../assets/LeftArrowIcon";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ThemeVariables } from "../../utilities/Theme";
 
-interface props {
-	currentlyShown: boolean;
-	timelineRef: React.MutableRefObject<gsap.core.Timeline>;
+enum ComponentPage {
+	Main,
+	IndvPageSettings,
 }
 
-const subpages = ["main", "pageSettings"];
+const backIcon = css`
+	position: absolute;
+	top: 16px;
+	left: 16px;
+`;
 
-function ContentSettings({ currentlyShown, timelineRef }: props) {
-	const theme = useTheme();
+const itemCss = css`
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+`;
 
-	const [currentlyShowing, setCurrentlyShowing] = useState("main");
-	const { pageSources, setPageSources } = usePageSources();
+const contentCss = css`
+	margin: 1rem 0;
+`;
+
+function ContentSettings() {
+	const ref = useRef(null);
+	const initializedRef = useRef(false);
+
+	const [currentlyShowing, setCurrentlyShowing] = useState<ComponentPage>(ComponentPage.Main);
 	const [currentContentPage, setCurrentContentPage] = useState<Page | null>(
 		null
 	);
+	const { pageSources, setPageSources } = usePageSources();
 
-	const backButtonRef = useRef(null);
+	useEffect(()=> {
+		console.log(pageSources)
+	})
 
-	useGSAP(() => {
-		if (currentlyShowing == "main") {
-			gsap.to(backButtonRef.current, { opacity: 0 });
-		} else {
-			gsap.to(backButtonRef.current, { opacity: 1 });
-		}
-	}, [currentlyShowing]);
-	const backIcon = css`
-		position: absolute;
-		top: 16px;
-		left: 16px;
-	`;
-
-	const currentPages = [
-		...subpages.filter((item) => !currentlyShowing.includes(item)),
-		currentlyShowing,
-	];
-
-	const itemCss = css`
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		/* margin-bottom: 2rem; */
-		padding: 1rem;
-	`;
-
-	const contentCss = css`
-		margin: 1rem 0;
-	`;
+	useGSAP(
+		() => {
+			if (initializedRef.current) {
+				gsap.fromTo(
+					ref.current,
+					{ opacity: 0, duration: 0.5 },
+					{ opacity: 1, duration: 0.5 }
+				);
+			} else {
+				initializedRef.current = true;
+			}
+		},
+		{ dependencies: [currentContentPage, currentlyShowing] }
+	);
 
 	const savePage = (page: Page) => {
 		const newPageSources = pageSources;
@@ -65,12 +69,11 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 
 		setPageSources(newPageSources);
 		setCurrentContentPage(null);
-		setCurrentlyShowing("main");
+		setCurrentlyShowing(ComponentPage.Main);
 	};
 
 	const handleBackButton = () => {
-		setCurrentlyShowing("main");
-		setCurrentContentPage(null);
+		setCurrentlyShowing(ComponentPage.Main);
 	};
 
 	const handleAddClick = () => {
@@ -92,7 +95,6 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 			},
 		]);
 	};
-
 	const handlePageEditButton: MouseEventHandler = (e) => {
 		const target = e.target as HTMLElement;
 		const pageId = target.getAttribute("data-id") ?? 0;
@@ -100,7 +102,7 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 			pageSources.find((item) => item.id == pageId) ?? pageSources[0];
 
 		setCurrentContentPage(selectedPage);
-		setCurrentlyShowing("pageSettings");
+		setCurrentlyShowing(ComponentPage.IndvPageSettings);
 	};
 
 	const handlePageDeleteButton: MouseEventHandler = (e) => {
@@ -117,62 +119,42 @@ function ContentSettings({ currentlyShown, timelineRef }: props) {
 	};
 
 	return (
-		<div>
-			{currentPages.map((page) => {
-				if (page == "main") {
-					return (
-						<SettingsPage
-							currentlyShown={currentlyShown && currentlyShowing == "main"}
-							timelineRef={timelineRef}
-							key={"main-ContentSettings"}
-						>
-							<h1>Content</h1>
-							<ReactSortable
-								list={pageSources}
-								setList={setPageSources}
-								css={contentCss}
-							>
-								{pageSources.map((source) => (
-									<div key={source.id} css={itemCss}>
-										<p>{source.title}</p>
-										<Button data-id={source.id} onClick={handlePageEditButton}>
-											Edit Page
-										</Button>
-										<Button
-											data-id={source.id}
-											onClick={handlePageDeleteButton}
-										>
-											Delete Page
-										</Button>
-									</div>
-								))}
-							</ReactSortable>
+		<div ref={ref}>
+			{currentlyShowing == ComponentPage.IndvPageSettings && currentContentPage && (
+				<ContentPageSettings
+					page={currentContentPage}
+					setCurrentContentPage={savePage}
+				>
+					<Button css={backIcon} onClick={handleBackButton}>
+						<LeftArrowIcon color={`var(${ThemeVariables.contentFgColor})`} />
+					</Button>
+				</ContentPageSettings>
+			)}
 
-							<Button onClick={handleAddClick}>
-								<p>Add Source</p>
-							</Button>
-						</SettingsPage>
-					);
-				} else if (page == "pageSettings" && currentContentPage) {
-					return (
-						<ContentPageSettings
-							page={currentContentPage}
-							setCurrentContentPage={savePage}
-							currentlyShown={
-								currentlyShown && currentlyShowing == "pageSettings"
-							}
-							timelineRef={timelineRef}
-							key={"pageSettings-ContentSettings"}
-						></ContentPageSettings>
-					);
-				}
-			})}
+			{currentlyShowing == ComponentPage.Main && (
+				<SettingsPage>
+					<h1>Content</h1>
+					<ReactSortable
+						list={pageSources}
+						setList={setPageSources}
+						css={contentCss}
+					>
+						{pageSources.map((source) => (
+							<div key={source.id} css={itemCss}>
+								<p>{source.title}</p>
+								<Button data-id={source.id} onClick={handlePageEditButton}>
+									Edit Page
+								</Button>
+								<Button data-id={source.id} onClick={handlePageDeleteButton}>
+									Delete Page
+								</Button>
+							</div>
+						))}
+					</ReactSortable>
 
-			<div ref={backButtonRef} css={backIcon} style={{ opacity: 0 }}>
-				<Button onClick={handleBackButton}>
-					<LeftArrowIcon color={`var(${theme.names.contentFgColor})`} />
-				</Button>
-			</div>
+					<Button onClick={handleAddClick}>Add Source</Button>
+				</SettingsPage>
+			)}
 		</div>
 	);
 }
