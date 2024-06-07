@@ -36,7 +36,7 @@ function ContentPageIndicator() {
 			);
 
 			if (parentRef.current) {
-				newElements.forEach((element, index) => {
+				newElements.forEach((element) => {
 					timelineRef.current.fromTo(
 						element,
 						{ opacity: 0, y: 50 },

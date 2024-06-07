@@ -19,10 +19,6 @@ const styles = css`
 	}
 `;
 
-const tableStyle = css``;
-
-const defaultStyle = css``;
-
 function Content() {
 	const { currentPageData } = usePageData();
 	const [previousPageData, setPreviousPageData] = useState<PageData | null>(

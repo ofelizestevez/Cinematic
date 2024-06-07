@@ -1,4 +1,3 @@
-import { ReactNode } from "react"
 import { Providers } from "./providers/_main"
 
 export interface Page {
