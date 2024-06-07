@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import { Page } from "./interfaces";
+import { Page } from "../utilities/interfaces";
 
 interface ContentPageContextType {
 	pageSources: Page[];

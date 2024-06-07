@@ -1,4 +1,4 @@
-import { usePageSources } from "../utilities/ContentPageContext";
+import { usePageSources } from "../hooks/ContentPageContext";
 
 export const useLoadSettings = () => {
     const { setPageSources } = usePageSources();

@@ -4,7 +4,7 @@ import GeneralSettings from "./settings/GeneralSettings";
 import ThemeSettings from "./settings/ThemeSettings";
 import {gsap} from "gsap";
 import { css } from "@emotion/react";
-import { usePageSources } from "../utilities/ContentPageContext";
+import { usePageSources } from "../hooks/ContentPageContext";
 import { useGSAP } from "@gsap/react";
 import { SettingsPage } from "./Settings";
 import { LocalStorageKeys } from "../utilities/LocalStorage";

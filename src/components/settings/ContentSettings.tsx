@@ -1,6 +1,6 @@
 import { ReactSortable } from "react-sortablejs";
 import SettingsPage from "../SettingsPage";
-import { usePageSources } from "../../utilities/ContentPageContext";
+import { usePageSources } from "../../hooks/ContentPageContext";
 import Button from "../simple/Button";
 import { css } from "@emotion/react";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";

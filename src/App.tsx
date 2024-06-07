@@ -14,6 +14,7 @@ import { useSettings } from "./hooks/useSettings.ts";
 import { useLoadSettings } from "./hooks/useLoadSettings.ts";
 import { LocalStorageKeys } from "./utilities/LocalStorage.ts";
 import Header from "./components/Header.tsx";
+import useFetchPageData from "./hooks/useFetchPageData.tsx";
 
 // * Component
 function App() {
@@ -27,7 +28,8 @@ function App() {
     // * Hooks
     const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
     const loadSettings = useLoadSettings();
-
+    useFetchPageData(); // Use the custom hook to fetch page data
+    
     // * Animates Theme
     useGSAP(() => {
 		const themeVariableValues = themeToObject(theme);

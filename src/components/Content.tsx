@@ -1,13 +1,13 @@
 import { css } from "@emotion/react";
 import { SetStateAction, useEffect, useState } from "react";
-import { usePageSources } from "../utilities/ContentPageContext";
+import { usePageSources } from "../hooks/ContentPageContext";
 import { pageToProvider } from "../utilities/Provider";
 import MarkdownRenderer from "../utilities/MarkdownRenderer";
 import { ThemeVariables, themeSizes } from "../utilities/Theme";
 import { Providers } from "../utilities/providers/_main";
 import { PageData } from "../utilities/interfaces";
 import ContentPageIndicator from "./ContentPageIndicator";
-import { usePageData } from "../utilities/ContentPageDataContext";
+import { usePageData } from "../hooks/ContentPageDataContext";
 
 const styles = css`
 	width: 100%;
@@ -20,39 +20,7 @@ const styles = css`
 `;
 
 function Content() {
-	const { pageSources, setPageSources } = usePageSources();
-	const {pageData, setPageData} = usePageData()
 	// const [content, setContent] = useState<null | ReactNode>(null);
-
-	useEffect(() => {
-		Promise.all(pageSources.map(async (page) => {
-			if (!pageData.find((item) => page.id === item.id)) {
-				const content = await (async () => {
-					const provider = pageToProvider(page.content);
-					let providerData = <></>;
-	
-					if (provider && provider.constructor.name === Providers.WEBDAV) {
-						const data = await provider.load();
-						const element = MarkdownRenderer(data);
-						providerData = element;
-					}
-	
-					return providerData;
-				})();
-	
-				return {
-					id: page.id,
-					title: page.title,
-					style: "",
-					content: content
-				};
-			}
-		}))
-		.then((newPageData) => {
-			const filteredNewPageData = newPageData.filter(data => data); // Filter out undefined values
-			setPageData(prevPageData => [...prevPageData, ...filteredNewPageData].filter(data => data) as PageData[]);
-		});
-	}, [pageSources]);
 
 	return (
 		<section css={styles}>

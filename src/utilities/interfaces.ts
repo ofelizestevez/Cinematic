@@ -18,5 +18,5 @@ export interface PageData {
     id: number,
     title: string,
     style: string,
-    content: ReactNode
+    content: string
 }
