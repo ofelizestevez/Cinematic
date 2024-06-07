@@ -14,5 +14,6 @@
 
 ## Main To Do List 
 
-# Theme
+- [ ] Animate fade away of page indicator
+- [ ] animate fade in and fade out of content
 

@@ -22,6 +22,13 @@ export const PageDataProvider = ({ children }: React.PropsWithChildren<{}>) => {
     const [pageData, setPageData] = useState<PageData[]>([]);
     const [currentPageData, setCurrentPageData] = useState<PageData | null>(null);
 
+    // Effect to set currentPageData when the first pageData is added but only if there's only one page
+    React.useEffect(() => {
+        if (pageData.length === 1) {
+            setCurrentPageData(pageData[0]);
+        }
+    }, [pageData]);
+
     return (
         <PageDataContext.Provider value={{ pageData, setPageData, currentPageData, setCurrentPageData }}>
             {children}
