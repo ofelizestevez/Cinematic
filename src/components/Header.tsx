@@ -1,54 +1,48 @@
-import {
+import gsap from "gsap";
+import React, {
 	MouseEventHandler,
 	ReactNode,
 	useEffect,
 	useRef,
 	useState,
 } from "react";
+import { Theme, themeSizes } from "../utilities/Theme";
 import { css } from "@emotion/react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useBackgroundImage } from "../hooks/useBackgroundImage";
+import { useGSAP } from "@gsap/react";
+import { LocalStorageKeys } from "../utilities/LocalStorage";
 import { FastAverageColor } from "fast-average-color";
 import { Colord } from "colord";
-import { fetchUnsplash } from "../utilities/API";
-import { Theme, themeSizes } from "../utilities/Theme";
-import { LocalStorageKeys } from "../utilities/LocalStorage";
+gsap.registerPlugin(ScrollToPlugin);
 
 interface props {
 	children?: ReactNode;
 	setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
-// Image CSS Styles
 const image = css`
-position: absolute;
-width: 100%;
-top: 0;
+	position: absolute;
+	width: 100%;
+	top: 0%;
 `;
 
-function Header({ children, setTheme  }: props) {
-	// Refenrences for Header, Image Children, and GSAP Timeline
+function Header({ children, setTheme }: props) {
+	const { backgroundImage, changeImage } = useBackgroundImage();
+	const [backupImage, setBackupImage] = useState<string | null>("");
+	const [scrollable, setScrollable] = useState(false);
+	const [imageLoaded, setImageLoaded] = useState(false);
+	const [crossfadeTrigger, setCrossfadeTrigger] = useState({});
+
 	const ref = useRef<HTMLElement>(null);
 	const imageRef = useRef<HTMLImageElement>(null);
 	const backupImageRef = useRef<HTMLImageElement>(null);
-	const timeline = useRef(gsap.timeline({ repeat: 1 }));
-
-	// States for Image Sources + Scrollable
-	const [backgroundImage, setBackgroundImage] = useState(
-		localStorage.getItem("backgroundImage")
-	);
-	const [backupImage, setBackupImage] = useState("");
-	const [isScrollable, setScrollable] = useState(false);
-
-	// Variables for themes
-
-	const SCROLL_HEIGHT_ITEM = "scrollHeight";
-
-	// Header CSS Styles
+	const timeline = useRef(gsap.timeline());
+	
+    // Header CSS Styles
 	const styles = css`
 		position: relative;
-		overflow: ${isScrollable ? "scroll" : "hidden"};
+		overflow: ${scrollable ? "scroll" : "hidden"};
 		opacity: ${backgroundImage ? "100%" : "0%"};
 		height: ${themeSizes.headerHeight};
 
@@ -59,107 +53,67 @@ function Header({ children, setTheme  }: props) {
 		}
 	`;
 
-	// Registering scroll plugin
-	useGSAP(() => {
-		gsap.registerPlugin(ScrollToPlugin);
-	});
-
 	// Change Image if there is no background image
 	useEffect(() => {
 		if (!backgroundImage) {
 			changeImage();
 		}
-	}, []);
+	}, [backgroundImage]);
 
-	const changeImage = () => {
-		// Clears All timeline information, then starts "beating" loop
-		if (backgroundImage) {
-			timeline.current
-				.clear()
-				.repeat(1)
-				.fromTo(ref.current, { opacity: 1 }, { opacity: 0.5, duration: 1 })
-				.to(ref.current, { opacity: 1, duration: 1 });
+	useGSAP(() => {
+		if (!imageLoaded) {
+			if (backgroundImage && !backupImage) {
+				gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1 });
+			}
+		} else {
+			if (backupImage) {
+				if (backgroundImage == backupImage) {
+					timeline.current
+						.clear()
+						.repeat(-1)
+						.fromTo(ref.current, { opacity: 1 }, { opacity: 0.5, duration: 1 })
+						.to(ref.current, { opacity: 1, duration: 1 });
+				} else if (backgroundImage != backupImage) {
+					timeline.current.repeat(0).to(ref.current, { opacity: 1 });
+				}
+			}
 		}
+	}, [backgroundImage, backupImage]);
 
-		// fetch image from unsplash then set the url to background image + localstorage
-		fetchUnsplash().then((url) => {
-			setBackgroundImage(url);
-			localStorage.setItem(LocalStorageKeys.backgroundImage, url);
-		});
-	};
-
-	// Gets the fast color average of the backgroundImage, then determines light/dark
-	const headerSetTheme = () => {
-		const fac = new FastAverageColor();
-
-		fac.getColorAsync(imageRef.current, {}).then((color) => {
-			// Takes the color, turns it into a Colord to use .isDark()
-			const colord = new Colord(color.hex);
-			console.log(colord.isDark())
-			setTheme(colord.isDark() ? Theme.DARK : Theme.LIGHT);
-		});
-	};
-
-	const setInitialScrollPosition = () => {
-		// Sets scroll height to localstorage or defaults to halways point
-		let scrollHeight = localStorage.getItem(SCROLL_HEIGHT_ITEM);
-		if (!scrollHeight) {
-			const headerHalfScrollPoint =
-				(ref.current!.scrollHeight - ref.current!.clientHeight) / 2;
-
-			scrollHeight = JSON.stringify(headerHalfScrollPoint);
+	useGSAP(() => {
+        if (imageLoaded) {
+            console.log("YEO")
+			gsap
+				.fromTo(backupImageRef.current, { opacity: 1 }, { opacity: 0 })
+				.then(() => {
+					setBackupImage(null)
+				});
 		}
+	}, [crossfadeTrigger]);
 
-		ref.current!.scrollTop = parseFloat(scrollHeight);
-	};
+	useGSAP(() => {
+		if (imageLoaded) {
+			if (scrollable) {
+				gsap.to(ref.current, { opacity: 0.5 });
+			} else {
+				gsap.to(ref.current, { opacity: 1 });
+			}
+		}
+	}, [scrollable]);
 
-	// Resets ScrollTop to halfway point
-	const resetScrollPosition = () => {
-		// Gets halfway point by getting half of the scroll height minus client height
-		const headerHalfScrollPoint =
-			(ref.current!.scrollHeight - ref.current!.clientHeight) / 2;
-
-		// Animates new scroll position then saves it.
-		gsap.to(ref.current, { scrollTo: headerHalfScrollPoint });
-		localStorage.setItem(
-			LocalStorageKeys.scrollHeight,
-			JSON.stringify(headerHalfScrollPoint)
-		);
-	};
-
-	// Sets the fading image on top of the real image, and changes image behind it
 	const onImageClick = () => {
-		gsap.to(backupImageRef.current, { zIndex: 1 });
 		setBackupImage(backgroundImage ?? "");
-
 		changeImage();
 	};
 
-	// On image load:
-	// Sets initial scroll position
-	// Sets the theme (incase its not already set)
-	// TODO: setTheme smarter
-	// In case of "beating" animation, resets the timeline, resets header, then resets backup image
 	const onImageLoad = () => {
-		// Things to always do on image load
-		setInitialScrollPosition();
-		headerSetTheme();
-
-		// Prevents from running at initial load
-		// Only continue if in "beating animation"
-		// We only use backup image during the "beating" animation
-		if (backupImage == "") {
-			gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1 });
-			return;
+		if (!imageLoaded) {
+            setInitialScrollPosition();
+			setImageLoaded(true);
+		} else {
+			setCrossfadeTrigger({});
 		}
-
-		// Resets component opacity and fades out backup image
-		timeline.current
-			.clear()
-			.repeat(0)
-			.to(ref.current, { opacity: 1 })
-			.fromTo(backupImageRef.current, { opacity: 1 }, { opacity: 0 }, "<")
-			.to(backupImageRef.current, { zIndex: -1 });
+        headerSetTheme();
 	};
 
 	const onContextMenu: MouseEventHandler<HTMLElement> = (e) => {
@@ -170,42 +124,51 @@ function Header({ children, setTheme  }: props) {
 
 		e.preventDefault();
 
-		// shift key triggers reset scroll position
-		if (e.shiftKey) {
-			resetScrollPosition();
-			return;
-		}
-
-		// If scrollable, disable scroll appearance
-		// Also save scroll position to localstorage
-		if (isScrollable) {
-			gsap.to(ref.current, { opacity: 1 });
-			localStorage.setItem(
+        if (scrollable){
+            localStorage.setItem(
 				LocalStorageKeys.scrollHeight,
 				JSON.stringify(ref.current?.scrollTop)
 			);
-		}
-		// If not scrollable, enable scroll appearance
-		else {
-			gsap.fromTo(ref.current, { opacity: 1 }, { opacity: 0.5 });
-		}
-
-		setScrollable(!isScrollable);
+        }
+		setScrollable(!scrollable);
 	};
 
+    const setInitialScrollPosition = () => {
+		// Sets scroll height to localstorage or defaults to halways point
+		let scrollHeight = localStorage.getItem(LocalStorageKeys.scrollHeight);
+		if (!scrollHeight) {
+			const headerHalfScrollPoint =
+				(ref.current!.scrollHeight - ref.current!.clientHeight) / 2;
+
+			scrollHeight = JSON.stringify(headerHalfScrollPoint);
+		}
+
+		ref.current!.scrollTop = parseFloat(scrollHeight);
+	};
+
+    // Gets the fast color average of the backgroundImage, then determines light/dark
+    const headerSetTheme = () => {
+        const fac = new FastAverageColor();
+
+        fac.getColorAsync(imageRef.current, {}).then((color) => {
+            // Takes the color, turns it into a Colord to use .isDark()
+            const colord = new Colord(color.hex);
+            setTheme(colord.isDark() ? Theme.DARK : Theme.LIGHT);
+        });
+    };
+
 	return (
-		<header css={styles} onContextMenu={onContextMenu} ref={ref}>
+		<header ref={ref} css={styles} onContextMenu={onContextMenu}>
+			{children}
 			<img
+				ref={imageRef}
 				css={image}
+				crossOrigin="anonymous"
 				src={backgroundImage ?? ""}
-				alt=""
 				onClick={onImageClick}
 				onLoad={onImageLoad}
-				crossOrigin="anonymous"
-				ref={imageRef}
 			/>
-			<img css={image} src={backupImage ?? ""} alt="" ref={backupImageRef} />
-			<div>{children}</div>
+			<img ref={backupImageRef} css={image} src={backupImage ?? ""} />
 		</header>
 	);
 }

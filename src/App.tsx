@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-import Header from "./components/Header";
+
 import Content from "./components/Content";
 import Footer from "./components/Footer.tsx";
 import SettingsOverlay from "./components/SettingsOverlay.tsx";
@@ -13,6 +13,7 @@ import { Theme, themeToObject } from "./utilities/Theme.ts";
 import { useSettings } from "./hooks/useSettings.ts";
 import { useLoadSettings } from "./hooks/useLoadSettings.ts";
 import { LocalStorageKeys } from "./utilities/LocalStorage.ts";
+import Header from "./components/Header.tsx";
 
 // * Component
 function App() {
