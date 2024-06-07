@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
 import { Providers } from "../../utilities/providers/_main";
 import { Page } from "../../utilities/interfaces";
-import Input from "../Input";
+
 import SettingsPage from "../SettingsPage";
 import { ReactNode, useState } from "react";
 import SourceSettingsSection from "./SourceSettingsSection";
+import Input from "../simple/Input";
 
 interface props {
 	page: Page;

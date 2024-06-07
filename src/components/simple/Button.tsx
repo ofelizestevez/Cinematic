@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { MouseEventHandler, ReactNode } from "react";
-import { ThemeVariables } from "../utilities/Theme";
+import { ThemeVariables } from "../../utilities/Theme";
 
 interface Props {
 	children?: ReactNode;

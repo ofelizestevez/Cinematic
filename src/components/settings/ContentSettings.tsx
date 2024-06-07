@@ -1,9 +1,9 @@
 import { ReactSortable } from "react-sortablejs";
 import SettingsPage from "../SettingsPage";
 import { usePageSources } from "../../utilities/ContentPageContext";
-import Button from "../Button";
+import Button from "../simple/Button";
 import { css } from "@emotion/react";
-import { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { Page } from "../../utilities/interfaces";
 import ContentPageSettings from "./ContentPageSettings";
 import { Providers } from "../../utilities/providers/_main";
@@ -43,6 +43,10 @@ function ContentSettings() {
 		null
 	);
 	const { pageSources, setPageSources } = usePageSources();
+
+	useEffect(()=> {
+		console.log(pageSources)
+	})
 
 	useGSAP(
 		() => {

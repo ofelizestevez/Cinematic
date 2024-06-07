@@ -1,7 +1,7 @@
 import { MouseEventHandler, useRef, useState } from "react";
 import Input from "./Input";
 import { css } from "@emotion/react";
-import { ThemeVariables } from "../utilities/Theme";
+import { ThemeVariables } from "../../utilities/Theme";
 
 interface props {
 	currentOption: string;

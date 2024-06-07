@@ -11,6 +11,12 @@ export interface Page {
 export interface Source {
     type: Providers
     source?: any
-    data? : ReactNode
     saveEnabled: boolean
+}
+
+export interface PageData {
+    id: number,
+    title: string,
+    style: string,
+    content: ReactNode
 }

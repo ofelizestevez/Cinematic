@@ -42,7 +42,7 @@ function SettingsContent({ currentPage }: props) {
 	);
 
 	useEffect(() => {
-		console.log("WEEEEEEE")
+		console.log(pageSources)
 		const settings = {
 			pages: pageSources,
 		};

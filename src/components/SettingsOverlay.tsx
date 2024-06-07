@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
-import Button from "./Button.tsx";
+import Button from "./simple/Button.tsx";
 import CloseIcon from "../assets/CloseIcon.tsx";
-import Overlay from "./Overlay.tsx";
+import Overlay from "./simple/Overlay.tsx";
 import Settings from "./Settings.tsx";
 import { ThemeVariables } from "../utilities/Theme.ts";
 

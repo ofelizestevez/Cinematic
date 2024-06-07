@@ -150,7 +150,9 @@ function Header({ children, setTheme }: props) {
         fac.getColorAsync(imageRef.current, {}).then((color) => {
             // Takes the color, turns it into a Colord to use .isDark()
             const colord = new Colord(color.hex);
-            setTheme(colord.isDark() ? Theme.DARK : Theme.LIGHT);
+			const theme = colord.isDark() ? Theme.DARK : Theme.LIGHT
+            setTheme(theme);
+			localStorage.setItem(LocalStorageKeys.currentTheme, `${theme}`)
         });
     };
 

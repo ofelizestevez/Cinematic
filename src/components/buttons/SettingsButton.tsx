@@ -1,5 +1,5 @@
 import SettingsIcon from "../../assets/SettingsIcon";
-import Button from "../Button";
+import Button from "../simple/Button";
 import { ThemeVariables } from "../../utilities/Theme";
 
 interface props {

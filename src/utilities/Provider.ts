@@ -1,13 +1,13 @@
-import { Page } from "./interfaces";
+import { Source } from "./interfaces";
 import { Providers } from "./providers/_main";
 import { WebDav } from "./providers/WebDav";
 
 
-export const pageToProvider = (source: Page) => {
-    if (source.content.type == Providers.WEBDAV) {
+export const pageToProvider = (source: Source) => {
+    if (source.type == Providers.WEBDAV) {
         return new WebDav({
-            url: source.content.source,
-            saveEnabled: source.content.saveEnabled
+            url: source.source,
+            saveEnabled: source.saveEnabled
         });
     }
 };

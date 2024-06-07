@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { ReactNode } from "react";
-import { ThemeVariables } from "../utilities/Theme";
+import { ThemeVariables } from "../../utilities/Theme";
+
 
 interface props {
 	children?: ReactNode;

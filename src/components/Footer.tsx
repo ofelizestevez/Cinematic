@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import SettingsButton from "./buttons/SettingsButton";
+import ContentPageIndicator from "./ContentPageIndicator";
 
 interface props {
 	openSettings: () => void;
@@ -8,7 +9,7 @@ interface props {
 function Footer({ openSettings }: props) {
 	const styles = css`
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr auto 1fr;
 
 		width: calc(100% - (1rem * 2));
 		position: absolute;
@@ -34,7 +35,9 @@ function Footer({ openSettings }: props) {
 	return (
 		<footer css={styles}>
 			<div css={left}></div>
-			<div css={center}></div>
+			<div css={center}>
+			<ContentPageIndicator />
+			</div>
 			<div css={right}>
 				<SettingsButton openSettings={openSettings} />
 			</div>
