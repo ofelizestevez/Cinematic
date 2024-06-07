@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ContentSettings from "./settings/ContentSettings";
 import GeneralSettings from "./settings/GeneralSettings";
 import ThemeSettings from "./settings/ThemeSettings";
-import gsap from "gsap";
+import {gsap} from "gsap";
 import { css } from "@emotion/react";
 import { usePageSources } from "../utilities/ContentPageContext";
 import { useGSAP } from "@gsap/react";

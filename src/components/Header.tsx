@@ -5,7 +5,7 @@ import React, {
 	useRef,
 	useState,
 } from "react";
-import gsap from "gsap";
+import {gsap} from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { useGSAP } from "@gsap/react";
 import { css } from "@emotion/react";
