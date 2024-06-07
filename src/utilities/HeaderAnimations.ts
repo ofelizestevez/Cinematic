@@ -1,5 +1,5 @@
 // HeaderAnimations.ts
-import gsap from "gsap";
+import {gsap} from "gsap";
 
 export const fadeIn = (element: HTMLElement | null) => {
   if (element) {

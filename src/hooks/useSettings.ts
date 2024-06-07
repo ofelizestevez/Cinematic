@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import gsap from "gsap";
+import {gsap} from "gsap";
 
 export function useSettings() {
 	const [showSettings, setShowSettings] = useState(false);
