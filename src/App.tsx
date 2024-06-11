@@ -1,10 +1,22 @@
-// * Component
-function App() {
+import { css } from "@emotion/react";
+import Content from "./containers/Content";
+import Footer from "./containers/Footer";
+import Header from "./containers/Header";
 
-    return (
-        <>
-        </>
-    );
+const style = css`
+	display: flex;
+	height: 100vh;
+    flex-direction: column;
+`;
+
+function App() {
+	return (
+		<div css={style}>
+			<Header />
+			<Content />
+			<Footer />
+		</div>
+	);
 }
 
 export default App;
