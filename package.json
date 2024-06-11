@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.4",
     "colord": "^2.9.3",
     "fast-average-color": "^9.4.0",
+    "framer-motion": "^11.2.10",
     "lz-string": "^1.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
