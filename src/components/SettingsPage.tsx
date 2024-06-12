@@ -1,11 +1,12 @@
-import { css } from "@emotion/react";
+import { SerializedStyles, css } from "@emotion/react";
 import { ReactNode, useRef } from "react";
 
 interface props {
 	children?: ReactNode;
+	styles?: SerializedStyles;
 }
 
-function SettingsPage({ children }: props) {
+function SettingsPage({ children, styles }: props) {
 	const ref = useRef(null);
 
 	const style = css`
@@ -16,7 +17,7 @@ function SettingsPage({ children }: props) {
 	`;
 
 	return (
-		<div css={[style]} ref={ref}>
+		<div css={[style, styles]} ref={ref}>
 			{children}
 		</div>
 	);

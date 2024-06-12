@@ -17,9 +17,9 @@ const style = css`
 function SettingsContent({ currentPage }: props) {
 	return (
 		<AnimatePresence>
-			<div>
+			<div css={style}>
 				<motion.div
-					css={style}
+					
 					key={currentPage}
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
