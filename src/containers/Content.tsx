@@ -9,6 +9,7 @@ import { ContentPageData, PageSourceToContent } from "../utilities/ContentPage";
 
 const style = css`
 	flex-grow: 1;
+	overflow: scroll;
 `;
 
 const Content = () => {
@@ -50,7 +51,7 @@ const Content = () => {
 				{isEditingContent ? (
 					<ContentEditor key="content-editor" />
 				) : (
-					<ContentView key="content-view" />
+					<ContentView key="content-view" pageData={pageData} />
 				)}
 			</motion.section>
 		</AnimatePresence>

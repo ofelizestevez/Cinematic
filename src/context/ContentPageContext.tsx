@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import React, {
+	createContext,
+	useState,
+	useContext,
+	ReactNode,
+	useEffect,
+} from "react";
 import { ContentPage } from "../utilities/ContentPage"; // Adjust the import path as necessary
 import { LocalStorageKeys } from "../utilities/LocalStorage";
 import { useCurrentContentPage } from "./CurrentContentPageContext";
@@ -42,14 +48,28 @@ export const ContentPagesProvider = ({ children }: { children: ReactNode }) => {
 	const { currentContentPage, setCurrentContentPage } = useCurrentContentPage();
 
 	useEffect(() => {
-		localStorage.setItem(LocalStorageKeys.pages, JSON.stringify(contentPages))
+		localStorage.setItem(LocalStorageKeys.pages, JSON.stringify(contentPages));
+		const foundPage = contentPages.find(
+			(page) => page.id === currentContentPage?.id
+		);
+		
+		if (!currentContentPage && contentPages.length > 0) {
+			setCurrentContentPage(contentPages[0]);
+		} else if (
+			currentContentPage &&
+			!contentPages.some((page) => page.id === currentContentPage.id)
+		) {
+			setCurrentContentPage(contentPages[0]);
+		} else if (
+			currentContentPage &&
+			foundPage &&
+			currentContentPage.id === foundPage.id &&
+			JSON.stringify(currentContentPage) !== JSON.stringify(foundPage)
+		) {
+			setCurrentContentPage(foundPage)
+		}
 
-		if (!currentContentPage && contentPages.length > 0){
-			setCurrentContentPage(contentPages[0])
-		} else if (currentContentPage && !contentPages.some(page => page.id === currentContentPage.id)) {
-            setCurrentContentPage(contentPages[0]);
-        }
-	}, [contentPages])
+	}, [contentPages]);
 
 	return (
 		<ContentPagesContext.Provider value={{ contentPages, setContentPages }}>

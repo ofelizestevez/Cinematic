@@ -105,7 +105,7 @@ function ContentPageSettings({ page, children, save }: props) {
 			</div>
 
 			<Input>
-				<button>Save</button>
+				<button onClick={handleSave}>Save</button>
 			</Input>
             {children}
 		</SettingsPage>

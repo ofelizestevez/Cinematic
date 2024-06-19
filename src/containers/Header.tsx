@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 
 const style = css`
-    height: 40vh;
+    /* height: 40vh; */
 `
 
 const Header = () => {

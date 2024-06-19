@@ -39,6 +39,7 @@ function ContentPageIndicator() {
 							onClick={() => {
 								setCurrentContentPage(page);
 							}}
+							style={{height: "100%"}}
 						>
 							{page.title}
 						</Button>

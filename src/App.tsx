@@ -5,9 +5,10 @@ import Header from "./containers/Header";
 import Settings from "./containers/Settings";
 
 const style = css`
-	display: flex;
+	display: grid;
+	grid-template-rows: 4fr 6fr auto;
 	height: 100vh;
-    flex-direction: column;
+	flex-direction: column;
 `;
 
 function App() {
