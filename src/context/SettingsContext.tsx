@@ -4,6 +4,7 @@ import { ContentPagesProvider } from "./ContentPageContext";
 import { ThemeProvider } from "./ThemeContext";
 import { SettingsOverlayProvider } from "./SettingsOverlayContext";
 import { CurrentContentPageProvider } from "./CurrentContentPageContext";
+import { EditingContentProvider } from "./EditingContentContext";
 
 // Initialize the context
 const SettingsContext = createContext<{} | undefined>(undefined);
@@ -16,7 +17,9 @@ export const SettingsProvider = ({ children }: React.PropsWithChildren<{}>) => {
 				<CurrentContentPageProvider>
 					<ContentPagesProvider>
 						<ThemeProvider>
-							<SettingsOverlayProvider>{children}</SettingsOverlayProvider>
+							<SettingsOverlayProvider>
+								<EditingContentProvider>{children}</EditingContentProvider>
+							</SettingsOverlayProvider>
 						</ThemeProvider>
 					</ContentPagesProvider>
 				</CurrentContentPageProvider>

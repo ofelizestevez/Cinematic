@@ -42,6 +42,8 @@ export const ContentPagesProvider = ({ children }: { children: ReactNode }) => {
 	const { currentContentPage, setCurrentContentPage } = useCurrentContentPage();
 
 	useEffect(() => {
+		localStorage.setItem(LocalStorageKeys.pages, JSON.stringify(contentPages))
+
 		if (!currentContentPage && contentPages.length > 0){
 			setCurrentContentPage(contentPages[0])
 		} else if (currentContentPage && !contentPages.some(page => page.id === currentContentPage.id)) {

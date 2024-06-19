@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
-import SettingsIcon from "../components/SettingsIcon";
+import SettingsButton from "../components/SettingsButton";
 import ContentPageIndicator from "../components/ContentPageIndicator";
+import EditButton from "../components/EditButton";
 
 const style = css`
 	display: grid;
@@ -32,7 +33,8 @@ const Footer = () => {
 			<ContentPageIndicator />
 		</div>
         <div css={right}>
-			<SettingsIcon />
+			<EditButton />
+			<SettingsButton />
 		</div>
     </footer>;
 };
