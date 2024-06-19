@@ -55,6 +55,13 @@ export const themeSizes = {
 	contentHeaderPaddingHeight: "2rem",
 };
 
+export const getThemeDetails = (theme : Theme) => {
+	if (theme == Theme.DARK) {
+		return darkTheme;
+	}
+	return lightTheme;
+}
+
 export const themeToObject = (theme: Theme) => {
     const themeDetails = (() => {
         if (theme == Theme.DARK) {

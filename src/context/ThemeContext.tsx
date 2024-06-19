@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
-import { ThemeDetails } from "../utilities/Theme"; // Adjust the import path as necessary
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { Theme, ThemeDetails, getThemeDetails, themeToObject } from "../utilities/Theme"; // Adjust the import path as necessary
+import { LocalStorageKeys } from "../utilities/LocalStorage";
 
 // Define the shape of the theme context
 interface ThemeContextType {
@@ -21,8 +22,10 @@ export const useTheme = () => {
 
 // Define the provider component
 export const ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {
-    const [theme, setTheme] = useState<ThemeDetails>({} as ThemeDetails);
-
+    const currentTheme = (localStorage.getItem(LocalStorageKeys.currentTheme) as Theme | null ?? Theme.LIGHT)
+    const themeDetails = getThemeDetails(currentTheme)
+    const [theme, setTheme] = useState<ThemeDetails>(themeDetails as ThemeDetails);
+    
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>
             {children}

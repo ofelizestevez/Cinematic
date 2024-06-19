@@ -1,6 +1,6 @@
 export enum LocalStorageKeys {
+    pages = "pages",
+    backgroundImage = "backgroundImage",
     currentTheme = "currentTheme",
     scrollHeight = "scrollHeight",
-    backgroundImage = "backgroundImage",
-    settings = "settings"
 }

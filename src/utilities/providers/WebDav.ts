@@ -9,7 +9,7 @@ interface save {
 	data: string;
 }
 
-export class WebDav extends Provider {
+export class WebDavProvider extends Provider {
 	url;
 
 	constructor({ url, saveEnabled }: load) {

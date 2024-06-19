@@ -12,3 +12,11 @@ export interface Source {
     source?: any
     saveEnabled: boolean
 }
+
+export interface ContentPageData {
+    id: number,
+    title: string,
+    style: string,
+    content: string,
+    timestamp: Date
+}

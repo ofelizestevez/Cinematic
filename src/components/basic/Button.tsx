@@ -15,7 +15,6 @@ const styles = css`
 `;
 
 function Button({ children, ...props }: Props) {
-
 	return (
 		<button css={styles} {...props}>
 			{children}

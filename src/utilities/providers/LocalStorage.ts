@@ -15,11 +15,11 @@ export class LocalStorageProvider extends Provider {
 	prefix: string;
 	key: string;
 
-	constructor({ prefix, key, saveEnabled }: Load) {
+	constructor({ prefix, key }: Load) {
 		super();
 		this.prefix = prefix
 		this.key = key;
-		this.saveEnabled = saveEnabled;
+		this.saveEnabled = true;
 	}
 
 	load(): Promise<string> {
