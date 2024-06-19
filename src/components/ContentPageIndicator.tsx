@@ -4,9 +4,6 @@ import Button from "./basic/Button";
 import { useCurrentContentPage } from "../context/CurrentContentPageContext";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-import { useEffect } from "react";
-
-const MotionButton = motion(Button);
 
 const style = css`
 	display: flex;
@@ -18,9 +15,6 @@ function ContentPageIndicator() {
 	const { currentContentPage, setCurrentContentPage } = useCurrentContentPage();
 	const { theme } = useTheme();
 
-	useEffect(() => {
-		console.log(theme);
-	});
 	return (
 		<div css={style}>
 			{contentPages.map((page) => {
@@ -29,6 +23,7 @@ function ContentPageIndicator() {
 
 				return (
 					<motion.div
+						key={page.id}
 						animate={
 							{
 								"--contentHeaderBgColor": isActive
@@ -41,7 +36,6 @@ function ContentPageIndicator() {
 						}
 					>
 						<Button
-							key={page.id}
 							onClick={() => {
 								setCurrentContentPage(page);
 							}}
