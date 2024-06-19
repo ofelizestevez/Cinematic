@@ -1,7 +1,6 @@
 import SquareIconChecked from "../../assets/SquareIconChecked"
 import SquareIcon from "../../assets/SquareIcon"
 import { ThemeVariables } from "../../utilities/Theme"
-import { useEffect } from "react";
 
 interface props {
     isChecked: boolean

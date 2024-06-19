@@ -6,6 +6,7 @@ import { ThemeVariables } from "../../utilities/Theme";
 interface props {
 	children?: ReactNode;
 	inputRef?: React.RefObject<any>;
+	[key: string]: any;
 }
 
 const style = css`
@@ -23,9 +24,9 @@ const style = css`
 	}
 `;
 
-function Input({ children, inputRef }: props) {
+function Input({ children, inputRef, ...props }: props) {
 	return (
-		<div css={style} ref={inputRef}>
+		<div css={style} ref={inputRef} {...props}>
 			{children}
 		</div>
 	);

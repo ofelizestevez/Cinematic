@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import Checkbox from "../basic/Checkbox.tsx";
 import Dropdown from "../basic/Dropdown.tsx";
 import Input from "../basic/Input.tsx";
-import { useEffect } from "react";
 
 const style = css`
 	> * {

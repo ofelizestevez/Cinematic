@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { Theme, ThemeDetails, getThemeDetails, themeToObject } from "../utilities/Theme"; // Adjust the import path as necessary
+import React, { createContext, useState, useContext } from "react";
+import { Theme, ThemeDetails, getThemeDetails } from "../utilities/Theme"; // Adjust the import path as necessary
 import { LocalStorageKeys } from "../utilities/LocalStorage";
 
 // Define the shape of the theme context
