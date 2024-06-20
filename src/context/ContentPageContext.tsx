@@ -41,14 +41,14 @@ export const useContentPages = () => {
 
 // Define the provider component
 export const ContentPagesProvider = ({ children }: { children: ReactNode }) => {
-	const savedPages = localStorage.getItem(LocalStorageKeys.pages);
+	const savedPages = localStorage.getItem(LocalStorageKeys.Pages);
 	const [contentPages, setContentPages] = useState<ContentPage[]>(
 		JSON.parse(savedPages ?? "[]")
 	);
 	const { currentContentPage, setCurrentContentPage } = useCurrentContentPage();
 
 	useEffect(() => {
-		localStorage.setItem(LocalStorageKeys.pages, JSON.stringify(contentPages));
+		localStorage.setItem(LocalStorageKeys.Pages, JSON.stringify(contentPages));
 		const foundPage = contentPages.find(
 			(page) => page.id === currentContentPage?.id
 		);

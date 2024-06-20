@@ -3,7 +3,7 @@ import { themeToObject } from "./utilities/Theme.ts";
 import { Theme, ThemeVariables } from "./utilities/Theme.ts";
 
 // Gets Current Theme from localstorage
-const currentTheme = (localStorage.getItem(LocalStorageKeys.currentTheme) as  Theme | null ?? Theme.LIGHT)
+const currentTheme = (localStorage.getItem(LocalStorageKeys.CurrentTheme) as  Theme | null ?? Theme.LIGHT)
 const themeVariables = themeToObject(currentTheme)
 
 console.log(currentTheme)

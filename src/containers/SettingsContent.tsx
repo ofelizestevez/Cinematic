@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ContentSettings from "../components/settings/ContentSettings";
 import HeaderSettings from "../components/settings/HeaderSettings";
 import ThemeSettings from "../components/settings/ThemeSettings";
-import ImportExportSettings from "../components/settings/ImportExportSettings";
+import TransferSettings from "../components/settings/TransferSettings";
 
 interface props {
 	currentPage: SettingsPage;
@@ -28,7 +28,7 @@ function SettingsContent({ currentPage }: props) {
 					{currentPage == SettingsPage.Content && <ContentSettings />}
 					{currentPage == SettingsPage.Header && <HeaderSettings />}
 					{currentPage == SettingsPage.Theme && <ThemeSettings />}
-					{currentPage == SettingsPage.ImportExport && <ImportExportSettings />}
+					{currentPage == SettingsPage.Transfer && <TransferSettings />}
 				</motion.div>
 			</div>
 		</AnimatePresence>

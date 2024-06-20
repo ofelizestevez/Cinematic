@@ -13,7 +13,7 @@ export enum SettingsPage {
 	Content = "Content",
 	Header = "Header",
 	Theme = "Theme",
-	ImportExport = "Import/Export",
+	Transfer = "Transfer",
 }
 
 const page = css`

@@ -22,7 +22,7 @@ export const useTheme = () => {
 
 // Define the provider component
 export const ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {
-    const currentTheme = (localStorage.getItem(LocalStorageKeys.currentTheme) as Theme | null ?? Theme.LIGHT)
+    const currentTheme = (localStorage.getItem(LocalStorageKeys.CurrentTheme) as Theme | null ?? Theme.LIGHT)
     const themeDetails = getThemeDetails(currentTheme)
     const [theme, setTheme] = useState<ThemeDetails>(themeDetails as ThemeDetails);
     
