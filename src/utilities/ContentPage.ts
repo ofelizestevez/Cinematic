@@ -5,7 +5,6 @@ import { Provider, Providers } from "./providers/_main"
 export interface ContentPage {
     id: number,
     title: string,
-    style: Source,
     content: Source
 }
 
@@ -18,7 +17,6 @@ export interface Source {
 export interface ContentPageData {
     id: number,
     title: string,
-    style: string,
     content: string
 }
 

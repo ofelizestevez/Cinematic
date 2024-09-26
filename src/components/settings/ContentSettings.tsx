@@ -39,12 +39,7 @@ function ContentSettings() {
 					type: Providers.NONE,
 					source: "",
 					saveEnabled: false,
-				},
-				style: {
-					type: Providers.NONE,
-					source: "",
-					saveEnabled: false,
-				},
+				}
 			},
 		]);
 	};

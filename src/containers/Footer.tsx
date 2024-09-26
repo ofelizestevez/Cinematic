@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import SettingsButton from "../components/SettingsButton";
 import ContentPageIndicator from "../components/ContentPageIndicator";
 import EditButton from "../components/EditButton";
+import { useCurrentContentPage } from "../context/CurrentContentPageContext";
 
 const style = css`
 	display: grid;
@@ -27,13 +28,16 @@ const right = css`
 `;
 
 const Footer = () => {
+	const { currentContentPage, setCurrentContentPage } = useCurrentContentPage();
+
 	return <footer css={style}>
         <div css={left}>a</div>
         <div css={center}>
 			<ContentPageIndicator />
 		</div>
         <div css={right}>
-			<EditButton />
+			{currentContentPage ? (<EditButton />) : (<></>)}
+			
 			<SettingsButton />
 		</div>
     </footer>;

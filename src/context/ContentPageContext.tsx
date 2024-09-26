@@ -15,14 +15,6 @@ interface ContentPagesContextType {
 	setContentPages: (pages: ContentPage[]) => void;
 }
 
-// Define the ContentPageData interface
-export interface ContentPageData {
-	id: number;
-	title: string;
-	style: string;
-	content: string;
-}
-
 // Initialize the context
 const ContentPagesContext = createContext<ContentPagesContextType | undefined>(
 	undefined
@@ -52,20 +44,29 @@ export const ContentPagesProvider = ({ children }: { children: ReactNode }) => {
 		const foundPage = contentPages.find(
 			(page) => page.id === currentContentPage?.id
 		);
-		
-		if (!currentContentPage && contentPages.length > 0) {
+
+		if (contentPages.length <= 0){
+			setCurrentContentPage(undefined)
+		}
+		// If there is no current content page and there are available pages,
+    	// set the current content page to the first page.
+		else if (!currentContentPage && contentPages.length > 0) {
 			setCurrentContentPage(contentPages[0]);
-		} else if (
-			currentContentPage &&
-			!contentPages.some((page) => page.id === currentContentPage.id)
-		) {
+		}
+		// If there is a current content page but it is not found in the
+    	// contentPages array, set the current content page to the first page.
+		else if (currentContentPage && !foundPage) {
 			setCurrentContentPage(contentPages[0]);
-		} else if (
+		}
+		// If the current content page exists, is found in the array,
+    	// and its content has changed, update the current content page
+		else if (
 			currentContentPage &&
 			foundPage &&
 			currentContentPage.id === foundPage.id &&
 			JSON.stringify(currentContentPage) !== JSON.stringify(foundPage)
 		) {
+			console.log("HUHHHHHHHHHHHHHH")
 			setCurrentContentPage(foundPage)
 		}
 

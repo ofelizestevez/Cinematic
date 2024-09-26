@@ -32,13 +32,6 @@ function ContentPageSettings({ page, children, save }: props) {
 	const [saveContentEnabled, setContentSavedEnabled] = useState(
 		page.content.saveEnabled
 	);
-	const [styleSource, setStyleSource] = useState<string>(page.style.source);
-	const [styleTypeOption, setStyleTypeOption] = useState<string>(
-		page.style.type
-	);
-	const [saveStyleEnabled, setStyleSavedEnabled] = useState(
-		page.style.saveEnabled
-	);
 
 	const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setPageTitle(event.target.value);
@@ -52,11 +45,6 @@ function ContentPageSettings({ page, children, save }: props) {
 				type: contentTypeOption as unknown as Providers,
 				source: contentSource,
 				saveEnabled: saveContentEnabled
-			},
-			style: {
-				type: styleTypeOption as unknown as Providers,
-				source: styleSource,
-				saveEnabled: saveStyleEnabled
 			}
 		}
 
@@ -70,9 +58,6 @@ function ContentPageSettings({ page, children, save }: props) {
 	
 	return (
 		<SettingsPage styles={style}>
-			<Input>
-				<button onClick={handleSave}>Save</button>
-			</Input>
 			<div>
 				<h1>Title</h1>
 				<Input>
@@ -91,19 +76,6 @@ function ContentPageSettings({ page, children, save }: props) {
 				setSaveEnabledOption={setContentSavedEnabled}
 				/>
 			</div>
-			<div>
-				<h1>Style</h1>
-				<ContentPageSourceSection
-				source={styleSource}
-				setSource={setStyleSource}
-				sourceProvider={styleTypeOption}
-				setSourceProvider={setStyleTypeOption}
-				sourceProviderOptions={Object.values(Providers)}
-				saveEnabledOption={saveStyleEnabled}
-				setSaveEnabledOption={setStyleSavedEnabled}
-				/>
-			</div>
-
 			<Input>
 				<button onClick={handleSave}>Save</button>
 			</Input>

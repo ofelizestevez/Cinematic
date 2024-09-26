@@ -17,17 +17,15 @@ const Content = () => {
 	const { isEditingContent } = useEditingContent();
 	const animationKey = `${isEditingContent ? "editing" : "viewing"}-${currentContentPage?.id}`;
 	const [pageData, setPageData] = useState<ContentPageData>()
-
+	console.log(animationKey)
 	useEffect(() => {
 		const fetchData = async () => {
 			if (currentContentPage){
 				const contentPromise = PageSourceToContent(currentContentPage?.content, "content")
-				const stylePromise = PageSourceToContent(currentContentPage?.style, "style")
-				const [content, style] = await Promise.all([contentPromise, stylePromise]);
+				const [content] = await Promise.all([contentPromise]);
 				setPageData({
 					id: currentContentPage.id,
 					title: currentContentPage.title,
-					style: style ?? "",
 					content: content ?? ""
 				})
 			}
@@ -49,7 +47,7 @@ const Content = () => {
 				css={style}
 			>
 				{isEditingContent ? (
-					<ContentEditor key="content-editor" />
+					<ContentEditor key="content-editor" pageData={pageData} />
 				) : (
 					<ContentView key="content-view" pageData={pageData} />
 				)}
