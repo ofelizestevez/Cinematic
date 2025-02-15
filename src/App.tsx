@@ -1,57 +1,35 @@
-// * Imports
-import { useEffect, useState } from "react";
-import {gsap} from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-
-import Content from "./components/Content";
-import Footer from "./components/Footer.tsx";
-import SettingsOverlay from "./components/SettingsOverlay.tsx";
-
-import { Theme, themeToObject } from "./utilities/Theme.ts";
-
-import { useSettings } from "./hooks/useSettings.ts";
-import { useLoadSettings } from "./hooks/useLoadSettings.ts";
-import { LocalStorageKeys } from "./utilities/LocalStorage.ts";
-import Header from "./components/Header.tsx";
-import useFetchPageData from "./hooks/useFetchPageData.tsx";
-
-// * Component
 function App() {
-    // * States
-	const [initialized, setInitialized] = useState(false)
-    const [theme, setTheme] = useState<Theme>(() => {
-		const savedTheme = localStorage.getItem(LocalStorageKeys.currentTheme);
-		return savedTheme ? (JSON.parse(savedTheme) as Theme) : Theme.LIGHT;
-	});
+  const [count, setCount] = useState(0)
 
-    // * Hooks
-    const { showSettings, openSettings, closeSettings, settingsRef } = useSettings();
-    const loadSettings = useLoadSettings();
-    useFetchPageData(); // Use the custom hook to fetch page data
-    
-    // * Animates Theme
-    useGSAP(() => {
-		const themeVariableValues = themeToObject(theme);
-		gsap.to(":root", themeVariableValues);
-    }, [theme]);
-
-    // * App initialization
-    useEffect(() => {
-		if (!initialized) {
-            loadSettings();
-            setInitialized(true);
-        }
-    }, [initialized, loadSettings]);
-
-    return (
-        <>
-            <Header setTheme={setTheme} />
-            <Content />
-            {showSettings && <SettingsOverlay closeSettings={closeSettings} settingsRef={settingsRef} />}
-            <Footer openSettings={openSettings} />
-        </>
-    );
+  return (
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-export default App;
+export default App
