@@ -1,23 +1,23 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useState, MouseEvent, useRef, useEffect} from "react";
-import { getUrlWallpaper } from "../Utilities/urlSource";
-import { SubredditSource, UnsplashSource, UrlSource } from "../Model/WallpaperSource";
-import { getSubredditWallpaper } from "../Utilities/RedditSource";
-import { getUnsplashWallpaper } from "../Utilities/unsplashSource";
+import { getUnsplashWallpaper } from "../Utilities/unsplashSource"; // Make sure to import the correct function
+import { UnsplashSource } from "../Model/WallpaperSource";
+import { useTheme } from "../Utilities/ThemeProvider";
 
 enum storageKeys {
     scrollPosition = "scrollPosition"
 }
 
+// Styled components
 const HeaderElement = styled.header`
 	width: 100%;
 	height: 40vh;
 `;
 
-const imageElement = styled.img`
+const ImageElement = styled.img`
     width: 100%;
-`
+`;
 
 function Header() {
     const ref = useRef<HTMLDivElement>(null);
@@ -42,24 +42,8 @@ function Header() {
 
     useEffect(() => {
         setDefaults()
-    })
+    }, []) // Add empty dependency array to only run once after mount
 
-    useEffect(() => {
-        if (url === undefined){
-            const x : UnsplashSource = {
-                type: "unsplash",
-                dynamic: true,
-                apiKey: "5_eAmFAqHV7LKKrN9tawCxOqn9H-nlJ_DdKmq2lG6_8",
-                collections: "485707"
-            } 
-    
-            getUnsplashWallpaper(x).then(url => {
-                setUrl(url)
-                console.log(url)
-            })
-            .catch(err => console.error("Error fetching wallpaper:", err));
-        }
-    }, [url])
 
 	return (
 		<motion.div
@@ -72,8 +56,7 @@ function Header() {
             ref={ref}
 		>
 			<HeaderElement>
-                <imageElement src="your-image-url.jpg" alt="Description of image" />
-				<img src={url} alt="" />
+				<ImageElement src={url} alt="Dynamic Wallpaper" />
 			</HeaderElement>
 		</motion.div>
 	);
